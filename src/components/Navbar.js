@@ -7,7 +7,6 @@ import IconButton from '@mui/material/IconButton'
 import { Logout } from '@mui/icons-material'
 import { Tooltip, Avatar, MenuItem, ListItemIcon, Menu } from '@mui/material'
 import { Link, useHistory } from 'react-router-dom'
-import About from './About'
 
 export default function ButtonAppBar() {
   const history = useHistory()
@@ -28,7 +27,7 @@ export default function ButtonAppBar() {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            News
+            Classrooms
           </Typography>
 
           <Link to="/home">Home</Link>

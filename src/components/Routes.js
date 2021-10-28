@@ -6,12 +6,12 @@ import {
   Redirect
 } from 'react-router-dom'
 import ProtectedRoute from './ProtectedRoute'
-import About from './About'
-import Home from './Home'
-import Register from './Register'
-import Login from './Login'
+import About from './pages/About'
+import Home from './pages/Home.js'
+import Register from './pages/Register'
+import Login from './pages/Login'
 import Navbar from './Navbar'
-import NotFound from './NotFound'
+import NotFound from './pages/NotFound'
 
 export default function Routes() {
   return (

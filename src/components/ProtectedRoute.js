@@ -13,14 +13,7 @@ function ProtectedRoute({ component: Component, ...restOfProps }) {
     <Route
       {...restOfProps}
       render={(props) =>
-        isAuthenticated ? (
-          <div>
-            <Navbar />
-            <Component {...props} />
-          </div>
-        ) : (
-          <Redirect to="/login" />
-        )
+        isAuthenticated ? <Component {...props} /> : <Redirect to="/login" />
       }
     />
   )

@@ -8,7 +8,7 @@ import Box from '@mui/material/Box'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
-import axiosClient from '../axiosClient'
+import axiosClient from '../../axiosClient'
 
 export default function SignUp() {
   const handleSubmit = (event) => {
