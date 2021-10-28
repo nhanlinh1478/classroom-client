@@ -1,24 +1,42 @@
-import React, {useState, useEffect} from 'react'
-import axios from 'axios'
+import React, { useState, useEffect } from 'react'
+import axiosClient from '../axiosClient'
+import ClassroomCard from './classroom/ClassroomCard'
+import { Button, Grid } from '@mui/material'
+import AddClassroomModal from './classroom/AddClassroomModal'
 
 const Home = () => {
-
   const [classrooms, setClassrooms] = useState([])
+  const [open, setOpen] = useState(false)
+  const toggleModal = () => {
+    setOpen((prevState) => !prevState)
+  }
 
   useEffect(() => {
     async function fetchAPI() {
-      const result = await axios.get('http://localhost:5000/api/classrooms')
-      .catch(err => {
-        console.error(err)
-      })
-      setClassrooms(prevState => [...prevState, ...result.data])
+      const result = await axiosClient.get('/api/classrooms')
+      if (result) {
+        setClassrooms(result.data)
+      }
     }
+
     fetchAPI()
-  },[])
+  }, [])
 
   return (
     <div>
-      {classrooms.map(classroom => <div>{classroom.name}</div>)}
+      <Button
+        variant="contained"
+        onClick={toggleModal}
+        sx={{ display: 'block' }}
+      >
+        Add New Class
+      </Button>
+      <Grid container sx={{ alignItems: 'center' }}>
+        {classrooms.map((classroom) => (
+          <ClassroomCard key={classroom.id} classroom={classroom} />
+        ))}
+      </Grid>
+      <AddClassroomModal open={open} toggle={toggleModal} />
     </div>
   )
 }
