@@ -31,7 +31,6 @@ export default function ButtonAppBar() {
           </Typography>
 
           <Link to="/home">Home</Link>
-          <Link to="/about">About</Link>
           <Tooltip title="Account settings">
             <IconButton onClick={handleClick} size="small" sx={{ ml: 2 }}>
               <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>

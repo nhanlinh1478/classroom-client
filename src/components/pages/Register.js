@@ -2,29 +2,27 @@ import * as React from 'react'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
-import Link from '@mui/material/Link'
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import axiosClient from '../../axiosClient'
+import { Link } from 'react-router-dom'
 
-export default function SignUp() {
-  const handleSubmit = (event) => {
+export default function Register() {
+  const handleSubmit = async (event) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget)
-    // eslint-disable-next-line no-console
-    console.log({
-      email: data.get('email'),
-      username: data.get('username'),
-      password: data.get('password')
-    })
-    axiosClient.post('/api/auth/register', {
-      email: data.get('email'),
-      username: data.get('username'),
-      password: data.get('password')
-    })
+    try {
+      const response = await axiosClient.post('/api/auth/register', {
+        email: data.get('email'),
+        username: data.get('username'),
+        password: data.get('password')
+      })
+    } catch (err) {
+      alert(err)
+    }
   }
 
   return (
@@ -41,7 +39,7 @@ export default function SignUp() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign up
+          Register New Account
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
@@ -103,12 +101,12 @@ export default function SignUp() {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Sign Up
+            Register
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link href="/login" variant="body2">
-                Already have an account? Sign in
+              <Link to="/login" variant="body2">
+                Already have an account? Login
               </Link>
             </Grid>
           </Grid>

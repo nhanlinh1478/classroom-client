@@ -12,6 +12,14 @@ const Home = () => {
     setOpen((prevState) => !prevState)
   }
 
+  const addClassroom = async ({ name }) => {
+    const response = await axiosClient.post('/api/classrooms', {
+      name
+    })
+
+    setClassrooms((prevState) => prevState.concat(response.data))
+  }
+
   useEffect(() => {
     async function fetchAPI() {
       const result = await axiosClient.get('/api/classrooms')
@@ -29,7 +37,7 @@ const Home = () => {
         <Button
           variant="contained"
           onClick={toggleModal}
-          sx={{ display: 'block' }}
+          sx={{ display: 'block', m: 2 }}
         >
           Add New Class
         </Button>
@@ -38,7 +46,11 @@ const Home = () => {
             <ClassroomCard key={classroom.id} classroom={classroom} />
           ))}
         </Grid>
-        <AddClassroomModal open={open} toggle={toggleModal} />
+        <AddClassroomModal
+          open={open}
+          toggle={toggleModal}
+          addClassroom={addClassroom}
+        />
       </Layout>
     </div>
   )

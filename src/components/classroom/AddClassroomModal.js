@@ -12,20 +12,23 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: 400,
   bgcolor: 'background.paper',
-  border: '2px solid #000',
+  border: '1px solid #000',
+  borderRadius: '5px',
   boxShadow: 24,
   p: 4
 }
 
-export default function AddClassroomModal({ open, toggle }) {
+export default function AddClassroomModal({ open, toggle, addClassroom }) {
+  const [name, setName] = useState('')
+
   const handleSubmit = async (event) => {
     event.preventDefault()
-    console.log(event.target)
-    const data = new FormData(event.currentTarget)
-    const response = await axiosClient.post('/api/classrooms', {
-      name: data.get('name')
-    })
-    console.log(response)
+    await addClassroom({ name })
+    toggle()
+  }
+
+  const handleChange = (e) => {
+    setName(e.target.value)
   }
 
   return (
@@ -43,13 +46,21 @@ export default function AddClassroomModal({ open, toggle }) {
           component="form"
           justifyContent="right"
         >
+          <Typography
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+            sx={{ mr: 'auto', mb: 1 }}
+          >
+            Create new Classroom
+          </Typography>
           <TextField
             margin="normal"
             required
             fullWidth
-            id="name"
-            label="Class Name"
-            name="name"
+            value={name}
+            onChange={handleChange}
+            label="Name"
             autoFocus
           />
           <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
