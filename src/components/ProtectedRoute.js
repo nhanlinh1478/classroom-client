@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Redirect, Route } from 'react-router-dom'
 import axiosClient from '../axiosClient'
-import Navbar from './Navbar'
 
 function ProtectedRoute({ component: Component, ...restOfProps }) {
   const isAuthenticated = !!localStorage.getItem('token')

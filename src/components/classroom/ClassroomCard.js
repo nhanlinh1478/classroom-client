@@ -1,12 +1,14 @@
 import * as React from 'react'
-import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
-import CardMedia from '@mui/material/CardMedia'
-import Typography from '@mui/material/Typography'
-import { CardActionArea } from '@mui/material'
+import {
+  CardActionArea,
+  Card,
+  CardContent,
+  CardMedia,
+  Typography,
+} from '@mui/material'
 
 export default function ClassroomCard({ classroom }) {
-  const { name, owner } = classroom
+  const { name } = classroom
 
   return (
     <Card sx={{ minWidth: 345, maxWidth: 345, display: 'inline-block', m: 2 }}>

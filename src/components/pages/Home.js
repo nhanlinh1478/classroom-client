@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
+import { Button, Grid } from '@mui/material'
 import axiosClient from '../../axiosClient'
 import ClassroomCard from '../classroom/ClassroomCard'
-import { Button, Grid } from '@mui/material'
 import AddClassroomModal from '../classroom/AddClassroomModal'
 import Layout from '../Layout'
 
@@ -14,7 +14,7 @@ const Home = () => {
 
   const addClassroom = async ({ name }) => {
     const response = await axiosClient.post('/api/classrooms', {
-      name
+      name,
     })
 
     setClassrooms((prevState) => prevState.concat(response.data))

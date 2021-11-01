@@ -1,11 +1,17 @@
 import * as React from 'react'
-import AppBar from '@mui/material/AppBar'
-import Box from '@mui/material/Box'
-import Toolbar from '@mui/material/Toolbar'
-import Typography from '@mui/material/Typography'
-import IconButton from '@mui/material/IconButton'
 import { Logout } from '@mui/icons-material'
-import { Tooltip, Avatar, MenuItem, ListItemIcon, Menu } from '@mui/material'
+import {
+  Tooltip,
+  Avatar,
+  MenuItem,
+  ListItemIcon,
+  Menu,
+  AppBar,
+  Box,
+  Toolbar,
+  Typography,
+  IconButton,
+} from '@mui/material'
 import { Link, useHistory } from 'react-router-dom'
 
 export default function ButtonAppBar() {
@@ -52,7 +58,7 @@ export default function ButtonAppBar() {
                 width: 32,
                 height: 32,
                 ml: -0.5,
-                mr: 1
+                mr: 1,
               },
               '&:before': {
                 content: '""',
@@ -64,9 +70,9 @@ export default function ButtonAppBar() {
                 height: 10,
                 bgcolor: 'background.paper',
                 transform: 'translateY(-50%) rotate(45deg)',
-                zIndex: 0
-              }
-            }
+                zIndex: 0,
+              },
+            },
           }}
           transformOrigin={{ horizontal: 'right', vertical: 'top' }}
           anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}

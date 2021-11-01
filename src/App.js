@@ -1,6 +1,6 @@
 import React from 'react'
 import Router from './components/Routes'
-import CssBaseline from '@mui/material/CssBaseline'
+import { CssBaseline } from '@mui/material'
 import './app.css'
 
 function App() {

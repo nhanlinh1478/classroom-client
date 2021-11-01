@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
-import Avatar from '@mui/material/Avatar'
-import Button from '@mui/material/Button'
-import TextField from '@mui/material/TextField'
-import Grid from '@mui/material/Grid'
-import Box from '@mui/material/Box'
+import {
+  Avatar,
+  Button,
+  TextField,
+  Grid,
+  Box,
+  Typography,
+  Container,
+} from '@mui/material'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
-import Typography from '@mui/material/Typography'
-import Container from '@mui/material/Container'
 import axiosClient from '../../axiosClient'
 import { Link, useHistory } from 'react-router-dom'
 
@@ -18,10 +20,10 @@ export default function Register() {
     setDisabled(true)
     const data = new FormData(event.currentTarget)
     try {
-      const response = await axiosClient.post('/api/auth/register', {
+      await axiosClient.post('/api/auth/register', {
         email: data.get('email'),
         username: data.get('username'),
-        password: data.get('password')
+        password: data.get('password'),
       })
       history.push('/login')
     } catch (err) {
@@ -37,7 +39,7 @@ export default function Register() {
           marginTop: 8,
           display: 'flex',
           flexDirection: 'column',
-          alignItems: 'center'
+          alignItems: 'center',
         }}
       >
         <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>

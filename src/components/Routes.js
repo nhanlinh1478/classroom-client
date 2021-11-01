@@ -3,14 +3,13 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Redirect
+  Redirect,
 } from 'react-router-dom'
 import ProtectedRoute from './ProtectedRoute'
 import About from './pages/About'
 import Home from './pages/Home.js'
 import Register from './pages/Register'
 import Login from './pages/Login'
-import Navbar from './Navbar'
 import NotFound from './pages/NotFound'
 
 export default function Routes() {

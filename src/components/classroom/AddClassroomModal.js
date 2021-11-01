@@ -1,7 +1,5 @@
 import React, { useState } from 'react'
-import Button from '@mui/material/Button'
-import Typography from '@mui/material/Typography'
-import { Modal, Grid, TextField } from '@mui/material/'
+import { Button, Typography, Modal, Grid, TextField } from '@mui/material'
 
 const style = {
   position: 'absolute',
@@ -13,7 +11,7 @@ const style = {
   border: '1px solid #000',
   borderRadius: '5px',
   boxShadow: 24,
-  p: 4
+  p: 4,
 }
 
 export default function AddClassroomModal({ open, toggle, addClassroom }) {
