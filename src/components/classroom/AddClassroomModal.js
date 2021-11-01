@@ -1,9 +1,7 @@
 import React, { useState } from 'react'
-import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import { Modal, Grid, TextField } from '@mui/material/'
-import axiosClient from '../../axiosClient'
 
 const style = {
   position: 'absolute',
@@ -20,10 +18,18 @@ const style = {
 
 export default function AddClassroomModal({ open, toggle, addClassroom }) {
   const [name, setName] = useState('')
+  const [disabled, setDisabled] = useState(false)
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    await addClassroom({ name })
+    setDisabled(true)
+    try {
+      await addClassroom({ name })
+    } catch (err) {
+      alert(err)
+    }
+
+    setDisabled(false)
     toggle()
   }
 
@@ -63,7 +69,12 @@ export default function AddClassroomModal({ open, toggle, addClassroom }) {
             label="Name"
             autoFocus
           />
-          <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
+          <Button
+            type="submit"
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+            disabled={disabled}
+          >
             Create
           </Button>
         </Grid>

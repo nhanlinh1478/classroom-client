@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, { useState } from 'react'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -18,6 +18,7 @@ const theme = createTheme()
 
 export default function SignIn() {
   const history = useHistory()
+  const [disabled, setDisabled] = useState(false)
 
   const isAuthenticated = !!localStorage.getItem('token')
   if (isAuthenticated) {
@@ -26,6 +27,7 @@ export default function SignIn() {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
+    setDisabled(true)
     const data = new FormData(event.currentTarget)
 
     const response = await axiosClient.post('/api/auth/login', {
@@ -41,6 +43,7 @@ export default function SignIn() {
       ] = `Bearer ${localStorage.getItem('token')}`
       history.push('/home')
     }
+    setDisabled(false)
   }
 
   return (
@@ -96,6 +99,7 @@ export default function SignIn() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              disabled={disabled}
             >
               Sign In
             </Button>

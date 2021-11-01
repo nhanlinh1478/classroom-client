@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, { useState } from 'react'
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import TextField from '@mui/material/TextField'
@@ -8,11 +8,14 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import axiosClient from '../../axiosClient'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 
 export default function Register() {
+  const [disabled, setDisabled] = useState(false)
+  const history = useHistory()
   const handleSubmit = async (event) => {
     event.preventDefault()
+    setDisabled(true)
     const data = new FormData(event.currentTarget)
     try {
       const response = await axiosClient.post('/api/auth/register', {
@@ -20,9 +23,11 @@ export default function Register() {
         username: data.get('username'),
         password: data.get('password')
       })
+      history.push('/login')
     } catch (err) {
       alert(err)
     }
+    setDisabled(false)
   }
 
   return (
@@ -100,6 +105,7 @@ export default function Register() {
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            disabled={disabled}
           >
             Register
           </Button>
