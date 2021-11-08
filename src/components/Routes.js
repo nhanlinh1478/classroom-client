@@ -5,7 +5,7 @@ import {
   Route,
   Redirect,
 } from 'react-router-dom'
-import ProtectedRoute from './ProtectedRoute'
+// import ProtectedRoute from './ProtectedRoute'
 import About from './pages/About'
 import Home from './pages/Home.js'
 import Register from './pages/Register'
@@ -26,8 +26,8 @@ export default function Routes() {
           <Route exact path="/">
             <Redirect to="/home" />
           </Route>
-          <ProtectedRoute exact path="/home" component={Home} />
-          <ProtectedRoute path="/about" component={About} />
+          <Route exact path="/home" component={Home} />
+          <Route path="/about" component={About} />
           <Route path="*">
             <NotFound />
           </Route>
