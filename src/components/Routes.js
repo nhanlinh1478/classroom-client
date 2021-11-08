@@ -26,8 +26,8 @@ export default function Routes() {
           <Route exact path="/">
             <Redirect to="/home" />
           </Route>
-          <ProtectedRoute exact path="/home" component={Home} />
-          <ProtectedRoute path="/about" component={About} />
+          {/* <ProtectedRoute exact path="/home" component={Home} />
+          <ProtectedRoute path="/about" component={About} /> */}
           <Route path="*">
             <NotFound />
           </Route>
