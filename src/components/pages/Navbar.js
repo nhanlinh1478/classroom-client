@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Logout } from '@mui/icons-material'
+import { Add, Logout } from '@mui/icons-material'
 import {
   Tooltip,
   Avatar,
@@ -9,12 +9,22 @@ import {
   AppBar,
   Box,
   Toolbar,
-  Typography,
   IconButton,
+  Typography,
 } from '@mui/material'
-import { Link, useHistory } from 'react-router-dom'
-
+import MenuIcon from '@mui/icons-material/Menu'
+import Drawer from '../Drawer/Drawer'
+import { useHistory } from 'react-router-dom'
+import { makeStyles } from '@mui/styles'
+const useStyles = makeStyles({
+  toolBar: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItem: 'center',
+  },
+})
 export default function ButtonAppBar() {
+  const classes = useStyles()
   const history = useHistory()
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
@@ -31,12 +41,24 @@ export default function ButtonAppBar() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Classrooms
-          </Typography>
-
-          <Link to="/home">Home</Link>
+        <Toolbar className={classes.toolBar}>
+          <Drawer>
+            <MenuIcon />
+          </Drawer>
+          <div className={classes.headerWrapper}>
+            <img
+              src="https://www.gstatic.com/images/branding/googlelogo/svg/googlelogo_clr_74x24px.svg"
+              alt="Classroom"
+            />
+            <Typography variant="h6" className={classes.title}>
+              Classroom
+            </Typography>
+          </div>
+          <Tooltip title="create or join class">
+            <IconButton onClick={handleClick} size="small" sx={{ ml: 2 }}>
+              <Add className={classes.header_wrapper_right} />
+            </IconButton>
+          </Tooltip>
           <Tooltip title="Account settings">
             <IconButton onClick={handleClick} size="small" sx={{ ml: 2 }}>
               <Avatar sx={{ width: 32, height: 32 }}>M</Avatar>
