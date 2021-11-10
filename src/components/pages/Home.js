@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Grid } from '@mui/material'
+import { Grid } from '@mui/material'
 import axiosClient from '../../axiosClient'
 import ClassroomCard from '../classroom/ClassroomCard'
 import AddClassroomModal from '../classroom/AddClassroomModal'
@@ -34,13 +34,13 @@ const Home = () => {
   return (
     <div>
       <Layout>
-        <Button
+        {/* <Button
           variant="contained"
           onClick={toggleModal}
           sx={{ display: 'block', m: 2 }}
         >
           Add New Class
-        </Button>
+        </Button> */}
         <Grid container sx={{ alignItems: 'center' }}>
           {classrooms.map((classroom) => (
             <ClassroomCard key={classroom.id} classroom={classroom} />
