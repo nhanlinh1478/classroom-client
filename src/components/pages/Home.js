@@ -1,35 +1,30 @@
 import React, { useState, useEffect } from 'react'
 import { Button, Grid } from '@mui/material'
-import axiosClient from '../../axiosClient'
 import ClassroomCard from '../classroom/ClassroomCard'
 import AddClassroomModal from '../classroom/AddClassroomModal'
 import Layout from '../Layout'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchClassrooms, createClassroom } from '../classroom/classroomsSlice'
 
 const Home = () => {
-  const [classrooms, setClassrooms] = useState([])
   const [open, setOpen] = useState(false)
+  const classrooms = useSelector((state) => state.classrooms.classrooms)
+  const dispatch = useDispatch()
   const toggleModal = () => {
     setOpen((prevState) => !prevState)
   }
 
   const addClassroom = async ({ name }) => {
-    const response = await axiosClient.post('/api/classrooms', {
-      name,
-    })
-
-    setClassrooms((prevState) => prevState.concat(response.data))
+    dispatch(createClassroom({ name: name }))
   }
 
   useEffect(() => {
     async function fetchAPI() {
-      const result = await axiosClient.get('/api/classrooms')
-      if (result) {
-        setClassrooms(result.data)
-      }
+      dispatch(fetchClassrooms())
     }
 
     fetchAPI()
-  }, [])
+  }, [dispatch])
 
   return (
     <div>
