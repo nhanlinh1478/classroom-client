@@ -28,12 +28,6 @@ export default function Form({ addClassroom }) {
     if (subject === '') {
       setSubjectErr(true)
     }
-
-    if (name && section && subject) {
-      console.log(name)
-      console.log(section)
-      console.log(subject)
-    }
     try {
       await addClassroom({ name, section, subject })
       console.log(name, section, subject)

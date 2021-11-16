@@ -35,15 +35,12 @@ export default function AddClassroomModal({ open, toggle, addClassroom }) {
 
   const handleChangeName = (e) => {
     setName(e.target.value)
-    console.log(name)
   }
   const handleChangeSection = (e) => {
     setSection(e.target.value)
-    console.log(section)
   }
   const handleChangeSubject = (e) => {
     setSubject(e.target.value)
-    console.log(subject)
   }
   return (
     <div>

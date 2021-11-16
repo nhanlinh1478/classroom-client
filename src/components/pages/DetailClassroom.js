@@ -24,7 +24,7 @@ const rows = [
 ]
 
 function DetailClassroom() {
-  const user = useSelector((state) => state.user.user)
+  const user = useSelector((state) => state.user)
   console.log(user)
   return (
     <Layout>
