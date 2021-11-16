@@ -10,6 +10,7 @@ import ListItemText from '@mui/material/ListItemText'
 import InboxIcon from '@mui/icons-material/MoveToInbox'
 import MailIcon from '@mui/icons-material/Mail'
 import { IconButton } from '@mui/material'
+import ClassIcon from '@mui/icons-material/Class'
 
 import MenuIcon from '@mui/icons-material/Menu'
 import Header from '../Header/Header'
@@ -23,6 +24,12 @@ export default function TemporaryDrawer() {
     bottom: false,
     right: false,
   })
+  const itemClass = [
+    {
+      text: 'Classes',
+      icon: <ClassIcon />,
+    },
+  ]
   const toggleDrawer = (anchor, open) => (event) => {
     if (
       event.type === 'keydown' &&
@@ -42,14 +49,15 @@ export default function TemporaryDrawer() {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
+        {itemClass.map((item, index) => {
+          const { text, icon } = item
+          return (
+            <ListItem button key={text}>
+              {icon && <ListItemIcon>{icon}</ListItemIcon>}
+              <ListItemText primary={text} />
+            </ListItem>
+          )
+        })}
       </List>
       <Divider />
       <List>

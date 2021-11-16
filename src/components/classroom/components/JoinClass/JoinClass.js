@@ -1,5 +1,4 @@
 import React, { forwardRef } from 'react'
-import { useLocalContext } from '../../context/context'
 import Slide from '@mui/material/Slide'
 import Dialog from '@mui/material/Dialog'
 import { useStyles } from './styles'
@@ -8,8 +7,8 @@ import { Button, TextField } from '@mui/material'
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />
 })
-const JoinClass = () => {
-  const { joinClassDialog, setJoinClassDialog } = useLocalContext()
+const JoinClass = (props) => {
+  const { joinClassDialog, setJoinClassDialog } = props
   const classes = useStyles()
   return (
     <Dialog

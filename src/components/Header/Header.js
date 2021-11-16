@@ -4,20 +4,19 @@ import { useStyles } from './style'
 import { Add, Apps } from '@mui/icons-material'
 import { Avatar } from '@mui/material'
 import { useState } from 'react'
-import CreateClass from '../CreateClass/CreateClass'
-import { useLocalContext } from '../../context/context'
-import JoinClass from '../JoinClass/JoinClass'
+import CreateClass from '../classroom/components/CreateClass/CreateClass'
+import JoinClass from '../classroom/components/JoinClass/JoinClass'
 const Header = ({ children }) => {
   const classes = useStyles()
   const [anchorEl, setAnchorEl] = useState(null)
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget)
-    console.log(event.currentTarget)
   }
   const handleClose = () => {
     setAnchorEl(null)
   }
-  const { setCreateClassDialog, setJoinClassDialog } = useLocalContext()
+  const [createClassDialog, setCreateClassDialog] = useState(false)
+  const [joinClassDialog, setJoinClassDialog] = useState(false)
   const handleCreate = () => {
     handleClose()
     setCreateClassDialog(true)
@@ -59,8 +58,14 @@ const Header = ({ children }) => {
           </div>
         </Toolbar>
       </AppBar>
-      <CreateClass />
-      <JoinClass />
+      <CreateClass
+        createClassDialog={createClassDialog}
+        setCreateClassDialog={setCreateClassDialog}
+      />
+      <JoinClass
+        joinClassDialog={joinClassDialog}
+        setJoinClassDialog={setJoinClassDialog}
+      />
     </div>
   )
 }
