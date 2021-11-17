@@ -16,13 +16,15 @@ const style = {
 
 export default function AddClassroomModal({ open, toggle, addClassroom }) {
   const [name, setName] = useState('')
+  const [section, setSection] = useState('')
+  const [subject, setSubject] = useState('')
   const [disabled, setDisabled] = useState(false)
 
   const handleSubmit = async (event) => {
     event.preventDefault()
     setDisabled(true)
     try {
-      await addClassroom({ name })
+      await addClassroom({ name, section, subject })
     } catch (err) {
       alert(err)
     }
@@ -31,10 +33,15 @@ export default function AddClassroomModal({ open, toggle, addClassroom }) {
     toggle()
   }
 
-  const handleChange = (e) => {
+  const handleChangeName = (e) => {
     setName(e.target.value)
   }
-
+  const handleChangeSection = (e) => {
+    setSection(e.target.value)
+  }
+  const handleChangeSubject = (e) => {
+    setSubject(e.target.value)
+  }
   return (
     <div>
       <Modal
@@ -63,8 +70,26 @@ export default function AddClassroomModal({ open, toggle, addClassroom }) {
             required
             fullWidth
             value={name}
-            onChange={handleChange}
-            label="Name"
+            onChange={handleChangeName}
+            label="Class name"
+            autoFocus
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            value={section}
+            onChange={handleChangeSection}
+            label="Section"
+            autoFocus
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            value={subject}
+            onChange={handleChangeSubject}
+            label="Subject"
             autoFocus
           />
           <Button

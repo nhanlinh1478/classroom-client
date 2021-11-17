@@ -1,10 +1,9 @@
+import Drawer from '../components/Drawer/Drawer'
 import React from 'react'
-import Navbar from './Navbar'
-
 const Layout = ({ children }) => {
   return (
     <>
-      <Navbar />
+      <Drawer />
       <main>{children}</main>
     </>
   )

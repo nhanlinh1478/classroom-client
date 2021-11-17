@@ -9,7 +9,7 @@ import {
 
 export default function ClassroomCard({ classroom }) {
   console.log(classroom)
-  const { name } = classroom
+  const { name, section } = classroom
 
   return (
     <Card sx={{ minWidth: 345, maxWidth: 345, display: 'inline-block', m: 2 }}>
@@ -23,6 +23,9 @@ export default function ClassroomCard({ classroom }) {
         <CardContent>
           <Typography gutterBottom variant="h3" component="div">
             {name}
+          </Typography>
+          <Typography gutterBottom variant="h3" component="div">
+            {section}
           </Typography>
           <Typography variant="body2" color="text.secondary">
             Lizards are a widespread group of squamate reptiles, with over 6,000
