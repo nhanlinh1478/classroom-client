@@ -1,62 +1,114 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Layout from '../Layout'
-import { useSelector } from 'react-redux'
+import axiosClient from '../../axiosClient'
+import { useParams } from 'react-router-dom'
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
+  Card,
+  Typography,
+  CardContent,
+  CardMedia,
+  CardActions,
+  Button,
+  Container,
+  CardHeader,
+  IconButton,
+  Grid,
 } from '@mui/material'
+import '../../app.css'
+import styled from '@emotion/styled'
+import MoreVertIcon from '@mui/icons-material/MoreVert'
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein }
-}
-
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-]
-
+const MyContainer = styled(Container)({
+  marginLeft: '90px',
+  marginTop: '30px',
+})
+const MyCard = styled(Card)({
+  color: 'black',
+})
+const LinkCard = styled(Card)({
+  maxWidth: 300,
+  marginTop: 30,
+})
+const MyCardActions = styled(CardActions)({
+  marginLeft: '950px',
+})
+const WorkCard = styled(Card)({
+  marginTop: 30,
+  marginLeft: 0,
+})
 function DetailClassroom() {
-  const user = useSelector((state) => state.user)
-  console.log(user)
+  const [classroom, setClassroom] = useState('')
+  let { id } = useParams()
+  useEffect(() => {
+    async function fetchData() {
+      const results = await axiosClient.get(`/api/classrooms/${id}`)
+      console.log(results.data)
+
+      setClassroom(results.data)
+    }
+
+    fetchData()
+  }, [])
   return (
     <Layout>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Dessert (100g serving)</TableCell>
-              <TableCell align="right">Calories</TableCell>
-              <TableCell align="right">Fat&nbsp;(g)</TableCell>
-              <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-              <TableCell align="right">Protein&nbsp;(g)</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <TableRow
-                key={row.name}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {row.name}
-                </TableCell>
-                <TableCell align="right">{row.calories}</TableCell>
-                <TableCell align="right">{row.fat}</TableCell>
-                <TableCell align="right">{row.carbs}</TableCell>
-                <TableCell align="right">{row.protein}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <MyContainer>
+        <MyCard>
+          <CardMedia
+            component="img"
+            alt="green iguana"
+            height="140"
+            image="https://picsum.photos/200/300"
+          />
+          <CardContent>
+            <Typography gutterBottom variant="h2" component="div" color="#a32">
+              {classroom.name}
+            </Typography>
+            <Typography variant="h3" color="text.secondary">
+              {classroom.section}
+            </Typography>
+          </CardContent>
+          <MyCardActions>
+            <Button size="small">list user</Button>
+            <Button size="small">learn more</Button>
+          </MyCardActions>
+        </MyCard>
+        <Grid container spacing={2}>
+          <Grid item xs={3}>
+            <LinkCard>
+              <CardContent>
+                <CardHeader
+                  action={
+                    <IconButton aria-label="settings">
+                      <MoreVertIcon />
+                    </IconButton>
+                  }
+                  title="Class code"
+                >
+                  <MoreVertIcon sx={{ mt: 3 }} />
+                </CardHeader>
+                <Typography variant="h2" color="text.secondary">
+                  AzW23Fd
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button size="small">Share</Button>
+                <Button size="small">Learn More</Button>
+              </CardActions>
+            </LinkCard>
+          </Grid>
+          <Grid item xs={9}>
+            <WorkCard>
+              <Typography gutterBottom variant="h5" component="div">
+                Announce something to your class
+              </Typography>
+              <CardActions>
+                <Button size="small">cancel</Button>
+                <Button size="small">post</Button>
+              </CardActions>
+            </WorkCard>
+          </Grid>
+        </Grid>
+      </MyContainer>
     </Layout>
   )
 }

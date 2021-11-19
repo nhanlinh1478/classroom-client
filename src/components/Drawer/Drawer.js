@@ -14,10 +14,9 @@ import ClassIcon from '@mui/icons-material/Class'
 
 import MenuIcon from '@mui/icons-material/Menu'
 import Header from '../Header/Header'
-import { useStyles } from '../Header/style'
-
+import { useHistory } from 'react-router-dom'
 export default function TemporaryDrawer() {
-  const classes = useStyles()
+  const history = useHistory()
   const [state, setState] = React.useState({
     top: false,
     left: false,
@@ -28,6 +27,7 @@ export default function TemporaryDrawer() {
     {
       text: 'Classes',
       icon: <ClassIcon />,
+      path: '/',
     },
   ]
   const toggleDrawer = (anchor, open) => (event) => {
@@ -50,9 +50,9 @@ export default function TemporaryDrawer() {
     >
       <List>
         {itemClass.map((item, index) => {
-          const { text, icon } = item
+          const { text, icon, path } = item
           return (
-            <ListItem button key={text}>
+            <ListItem button key={text} onClick={() => history.push(path)}>
               {icon && <ListItemIcon>{icon}</ListItemIcon>}
               <ListItemText primary={text} />
             </ListItem>
@@ -80,7 +80,6 @@ export default function TemporaryDrawer() {
           <Header>
             <IconButton
               edge="start"
-              className={classes.menuButton}
               color="inherit"
               aria-label="menu"
               onClick={toggleDrawer(anchor, true)}

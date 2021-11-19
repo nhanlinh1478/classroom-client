@@ -1,13 +1,40 @@
-import { AppBar, Menu, MenuItem, Toolbar, Typography } from '@mui/material'
+import { AppBar, Menu, MenuItem, Toolbar, Typography, Box } from '@mui/material'
 import React from 'react'
-import { useStyles } from './style'
 import { Add, Apps } from '@mui/icons-material'
 import { Avatar } from '@mui/material'
 import { useState } from 'react'
 import CreateClass from '../classroom/components/CreateClass/CreateClass'
 import JoinClass from '../classroom/components/JoinClass/JoinClass'
+import styled from '@emotion/styled'
+const HeaderWrapper = styled.div({
+  display: 'flex',
+  alignItems: 'center',
+})
+const HeaderWrapperRight = styled.div({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+})
+const MyAppBar = styled(AppBar)({
+  backgroundColor: '#ffffff',
+  color: 'black',
+})
+const MyAvatar = styled(Avatar)({
+  marginRight: '15px',
+  color: '#5f656d',
+  cursor: 'pointer',
+})
+const MyApps = styled(Apps)({
+  marginRight: '15px',
+  color: '#5f656d',
+  cursor: 'pointer',
+})
+const MyAdd = styled(Add)({
+  marginRight: '15px',
+  color: '#5f656d',
+  cursor: 'pointer',
+})
 const Header = ({ children }) => {
-  const classes = useStyles()
   const [anchorEl, setAnchorEl] = useState(null)
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget)
@@ -26,22 +53,26 @@ const Header = ({ children }) => {
     setJoinClassDialog(true)
   }
   return (
-    <div className={classes.root}>
-      <AppBar className={classes.appBar} position="static">
-        <Toolbar className={classes.toolbar}>
-          <div className={classes.headerWrapper}>
+    <Box sx={{ flexGrow: 1 }}>
+      <MyAppBar position="static">
+        <Toolbar
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <HeaderWrapper>
             {children}
             <img
               src="https://www.gstatic.com/images/branding/googlelogo/svg/googlelogo_clr_74x24px.svg"
               alt="Classroom"
             />
-            <Typography variant="h6" className={classes.title}>
-              Classroom
-            </Typography>
-          </div>
-          <div className={classes.header_wrapper_right}>
-            <Add className={classes.icon} onClick={handleClick} />
-            <Apps className={classes.icon} />
+            <Typography variant="h6">Classroom</Typography>
+          </HeaderWrapper>
+          <HeaderWrapperRight>
+            <MyAdd onClick={handleClick} />
+            <MyApps />
             <Menu
               id="simple-menu"
               anchorEl={anchorEl}
@@ -52,12 +83,10 @@ const Header = ({ children }) => {
               <MenuItem onClick={handleJoin}>Join class</MenuItem>
               <MenuItem onClick={handleCreate}>Create class</MenuItem>
             </Menu>
-            <div>
-              <Avatar className={classes.icon} />
-            </div>
-          </div>
+            <MyAvatar />
+          </HeaderWrapperRight>
         </Toolbar>
-      </AppBar>
+      </MyAppBar>
       <CreateClass
         createClassDialog={createClassDialog}
         setCreateClassDialog={setCreateClassDialog}
@@ -66,7 +95,7 @@ const Header = ({ children }) => {
         joinClassDialog={joinClassDialog}
         setJoinClassDialog={setJoinClassDialog}
       />
-    </div>
+    </Box>
   )
 }
 

@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+
 import axiosClient from '../../axiosClient'
 
 export const fetchClassrooms = createAsyncThunk(
@@ -17,7 +18,14 @@ export const createClassroom = createAsyncThunk(
     return response.data
   }
 )
-
+// export const getClassroom = createAsyncThunk(
+//   'classrooms/classroom/:id',
+//   async (classroom) => {
+//     const response = await axiosClient.get('api/classrooms/:id')
+//     console.log(response.data)
+//     return response.data
+//   }
+// )
 const initialState = {
   classrooms: [],
 }
