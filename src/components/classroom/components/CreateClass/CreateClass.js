@@ -7,10 +7,16 @@ import { useDispatch } from 'react-redux'
 export default function CreateClass(props) {
   const { createClassDialog, setCreateClassDialog } = props
   const dispatch = useDispatch()
+
+  const handleClose = () => {
+    setCreateClassDialog(false)
+  }
+
   const addClassroom = async ({ name, section, subject }) => {
     dispatch(
       createClassroom({ name: name, section: section, subject: subject })
     )
+    handleClose()
   }
   useEffect(() => {
     async function fetchAPI() {
@@ -20,9 +26,6 @@ export default function CreateClass(props) {
     fetchAPI()
     handleClose()
   }, [dispatch])
-  const handleClose = () => {
-    setCreateClassDialog(false)
-  }
   return (
     <>
       <div>

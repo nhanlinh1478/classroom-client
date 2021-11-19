@@ -6,6 +6,10 @@ import { useState } from 'react'
 import CreateClass from '../classroom/components/CreateClass/CreateClass'
 import JoinClass from '../classroom/components/JoinClass/JoinClass'
 import styled from '@emotion/styled'
+import { useHistory } from 'react-router-dom'
+import { IconButton } from '@mui/material'
+import { AccountCircle } from '@mui/icons-material'
+
 const HeaderWrapper = styled.div({
   display: 'flex',
   alignItems: 'center',
@@ -35,22 +39,35 @@ const MyAdd = styled(Add)({
   cursor: 'pointer',
 })
 const Header = ({ children }) => {
-  const [anchorEl, setAnchorEl] = useState(null)
+  //const [anchorEl, setAnchorEl] = useState(null)
+  const history = useHistory()
+  const [anchorElClassroom, setAnchorElClassroom] = useState(null)
+  const [anchorElProfile, setAnchorElProfile] = useState(null)
   const handleClick = (event) => {
-    setAnchorEl(event.currentTarget)
+    setAnchorElClassroom(event.currentTarget)
   }
-  const handleClose = () => {
-    setAnchorEl(null)
+  const handleCloseClassroomMenu = () => {
+    setAnchorElClassroom(null)
+  }
+  const handleCloseProfileMenu = () => {
+    setAnchorElProfile(null)
+  }
+  const handleMenuProfile = (event) => {
+    setAnchorElProfile(event.currentTarget)
   }
   const [createClassDialog, setCreateClassDialog] = useState(false)
   const [joinClassDialog, setJoinClassDialog] = useState(false)
   const handleCreate = () => {
-    handleClose()
+    handleCloseClassroomMenu()
     setCreateClassDialog(true)
   }
   const handleJoin = () => {
-    handleClose()
+    handleCloseClassroomMenu()
     setJoinClassDialog(true)
+  }
+  const handleLogout = () => {
+    localStorage.clear()
+    history.push('/login')
   }
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -75,15 +92,36 @@ const Header = ({ children }) => {
             <MyApps />
             <Menu
               id="simple-menu"
-              anchorEl={anchorEl}
+              anchorEl={anchorElClassroom}
               keepMounted
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
+              open={Boolean(anchorElClassroom)}
+              onClose={handleCloseClassroomMenu}
             >
               <MenuItem onClick={handleJoin}>Join class</MenuItem>
               <MenuItem onClick={handleCreate}>Create class</MenuItem>
             </Menu>
-            <MyAvatar />
+            <div>
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleMenuProfile}
+                color="inherit"
+              >
+                <MyAvatar />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorElProfile}
+                keepMounted
+                open={Boolean(anchorElProfile)}
+                onClose={handleCloseProfileMenu}
+              >
+                <MenuItem onClick={handleCloseProfileMenu}>Profile</MenuItem>
+                <MenuItem onClick={handleLogout}>Log out</MenuItem>
+              </Menu>
+            </div>
           </HeaderWrapperRight>
         </Toolbar>
       </MyAppBar>

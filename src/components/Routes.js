@@ -8,10 +8,13 @@ import {
 import ProtectedRoute from './ProtectedRoute'
 import About from './pages/About'
 import Home from './pages/Home.js'
-import Register from './pages/Register'
-import Login from './pages/Login'
+import Register from './authentication/Register'
+import Login from './authentication/Login'
+import ActivationEmail from './authentication/ActivationEmail'
 import NotFound from './pages/NotFound'
 import DetailClassroom from './pages/DetailClassroom'
+import JoinClassroom from './classroom/JoinClassroom'
+import UserList from './classroom/UserList'
 export default function Routes() {
   return (
     <Router>
@@ -23,12 +26,26 @@ export default function Routes() {
           <Route path="/register">
             <Register />
           </Route>
-          <Route exact path="/">
+          <Route path="/activateEmail/:activation_token">
+            <ActivationEmail />
+          </Route>
+          <Route path="/" exact>
             <Redirect to="/home" />
           </Route>
           <ProtectedRoute exact path="/home" component={Home} />
           <ProtectedRoute path="/about" component={About} />
-          <ProtectedRoute path="/classrooms/:id" component={DetailClassroom} />
+          <ProtectedRoute path="/classrooms/join" component={JoinClassroom} />
+
+          <ProtectedRoute
+            exact
+            path="/classrooms/:id"
+            component={DetailClassroom}
+          />
+          <ProtectedRoute
+            exact
+            path="/classrooms/:id/user-list"
+            component={UserList}
+          />
           <Route path="*">
             <NotFound />
           </Route>

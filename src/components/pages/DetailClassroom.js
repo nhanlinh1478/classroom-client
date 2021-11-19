@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react'
 import Layout from '../Layout'
 import axiosClient from '../../axiosClient'
 import { useParams } from 'react-router-dom'
+import styled from '@emotion/styled'
+import MoreVertIcon from '@mui/icons-material/MoreVert'
+import { Link } from 'react-router-dom'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 import {
   Card,
   Typography,
@@ -14,9 +18,6 @@ import {
   IconButton,
   Grid,
 } from '@mui/material'
-import '../../app.css'
-import styled from '@emotion/styled'
-import MoreVertIcon from '@mui/icons-material/MoreVert'
 
 const MyContainer = styled(Container)({
   marginLeft: '90px',
@@ -38,6 +39,8 @@ const WorkCard = styled(Card)({
 })
 function DetailClassroom() {
   const [classroom, setClassroom] = useState('')
+  const [copyLink, setCopyLink] = useState(false)
+
   let { id } = useParams()
   useEffect(() => {
     async function fetchData() {
@@ -49,6 +52,9 @@ function DetailClassroom() {
 
     fetchData()
   }, [])
+  const handleCopyLink = () => {
+    console.log(copyLink)
+  }
   return (
     <Layout>
       <MyContainer>
@@ -68,7 +74,13 @@ function DetailClassroom() {
             </Typography>
           </CardContent>
           <MyCardActions>
-            <Button size="small">list user</Button>
+            <Button
+              size="medium"
+              component={Link}
+              to={`/classrooms/${id}/user-list`}
+            >
+              list user
+            </Button>
             <Button size="small">learn more</Button>
           </MyCardActions>
         </MyCard>
@@ -87,12 +99,16 @@ function DetailClassroom() {
                   <MoreVertIcon sx={{ mt: 3 }} />
                 </CardHeader>
                 <Typography variant="h2" color="text.secondary">
-                  AzW23Fd
+                  {classroom.id}
                 </Typography>
               </CardContent>
               <CardActions>
-                <Button size="small">Share</Button>
-                <Button size="small">Learn More</Button>
+                <CopyToClipboard
+                  text={classroom.id}
+                  onCopy={() => setCopyLink(true)}
+                >
+                  <Button size="large">copy link</Button>
+                </CopyToClipboard>
               </CardActions>
             </LinkCard>
           </Grid>
