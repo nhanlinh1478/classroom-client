@@ -1,24 +1,48 @@
-import {
-  AppBar,
-  Menu,
-  MenuItem,
-  Toolbar,
-  Typography,
-  IconButton,
-} from '@mui/material'
-import React, { useState } from 'react'
-import { useStyles } from './style'
-import { Add, AccountCircle } from '@mui/icons-material'
+import { AppBar, Menu, MenuItem, Toolbar, Typography, Box } from '@mui/material'
+import React from 'react'
+import { Add, Apps } from '@mui/icons-material'
+import { Avatar } from '@mui/material'
+import { useState } from 'react'
 import CreateClass from '../classroom/components/CreateClass/CreateClass'
 import JoinClass from '../classroom/components/JoinClass/JoinClass'
-import { useHistory } from 'react-router'
+import styled from '@emotion/styled'
+import { useHistory } from 'react-router-dom'
+import { IconButton } from '@mui/material'
+import { AccountCircle } from '@mui/icons-material'
 
+const HeaderWrapper = styled.div({
+  display: 'flex',
+  alignItems: 'center',
+})
+const HeaderWrapperRight = styled.div({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+})
+const MyAppBar = styled(AppBar)({
+  backgroundColor: '#ffffff',
+  color: 'black',
+})
+const MyAvatar = styled(Avatar)({
+  marginRight: '15px',
+  color: '#5f656d',
+  cursor: 'pointer',
+})
+const MyApps = styled(Apps)({
+  marginRight: '15px',
+  color: '#5f656d',
+  cursor: 'pointer',
+})
+const MyAdd = styled(Add)({
+  marginRight: '15px',
+  color: '#5f656d',
+  cursor: 'pointer',
+})
 const Header = ({ children }) => {
-  const classes = useStyles()
+  //const [anchorEl, setAnchorEl] = useState(null)
   const history = useHistory()
   const [anchorElClassroom, setAnchorElClassroom] = useState(null)
   const [anchorElProfile, setAnchorElProfile] = useState(null)
-
   const handleClick = (event) => {
     setAnchorElClassroom(event.currentTarget)
   }
@@ -46,17 +70,26 @@ const Header = ({ children }) => {
     history.push('/login')
   }
   return (
-    <div className={classes.root}>
-      <AppBar className={classes.appBar} position="static">
-        <Toolbar className={classes.toolbar}>
-          <div className={classes.headerWrapper}>
+    <Box sx={{ flexGrow: 1 }}>
+      <MyAppBar position="static">
+        <Toolbar
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <HeaderWrapper>
             {children}
-            <Typography variant="h6" className={classes.title}>
-              Classroom
-            </Typography>
-          </div>
-          <div className={classes.header_wrapper_right}>
-            <Add className={classes.icon} onClick={handleClick} />
+            <img
+              src="https://www.gstatic.com/images/branding/googlelogo/svg/googlelogo_clr_74x24px.svg"
+              alt="Classroom"
+            />
+            <Typography variant="h6">Classroom</Typography>
+          </HeaderWrapper>
+          <HeaderWrapperRight>
+            <MyAdd onClick={handleClick} />
+            <MyApps />
             <Menu
               id="simple-menu"
               anchorEl={anchorElClassroom}
@@ -76,7 +109,7 @@ const Header = ({ children }) => {
                 onClick={handleMenuProfile}
                 color="inherit"
               >
-                <AccountCircle />
+                <MyAvatar />
               </IconButton>
               <Menu
                 id="menu-appbar"
@@ -89,9 +122,9 @@ const Header = ({ children }) => {
                 <MenuItem onClick={handleLogout}>Log out</MenuItem>
               </Menu>
             </div>
-          </div>
+          </HeaderWrapperRight>
         </Toolbar>
-      </AppBar>
+      </MyAppBar>
       <CreateClass
         createClassDialog={createClassDialog}
         setCreateClassDialog={setCreateClassDialog}
@@ -100,7 +133,7 @@ const Header = ({ children }) => {
         joinClassDialog={joinClassDialog}
         setJoinClassDialog={setJoinClassDialog}
       />
-    </div>
+    </Box>
   )
 }
 

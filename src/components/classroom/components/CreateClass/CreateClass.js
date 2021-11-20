@@ -24,6 +24,7 @@ export default function CreateClass(props) {
     }
 
     fetchAPI()
+    handleClose()
   }, [dispatch])
   return (
     <>

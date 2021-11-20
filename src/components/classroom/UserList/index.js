@@ -6,7 +6,7 @@ import { Grid, Typography, Container } from '@mui/material'
 import partition from 'lodash/partition'
 import ListUsers from './List/ListUsers'
 import { Redirect } from 'react-router-dom'
-
+import Layout from '../../Layout'
 const UserList = () => {
   const [users, setUsers] = useState([])
   const [errorMsg, setErrorMsg] = useState('')
@@ -49,7 +49,7 @@ const UserList = () => {
   }
   return (
     <>
-      <Header />
+      <Layout />
       {errorMsg ? (
         <Redirect to="/" />
       ) : (
