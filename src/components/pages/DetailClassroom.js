@@ -17,6 +17,9 @@ import {
   CardHeader,
   IconButton,
   Grid,
+  Avatar,
+  TextField,
+  Input,
 } from '@mui/material'
 
 const MyContainer = styled(Container)({
@@ -37,11 +40,22 @@ const WorkCard = styled(Card)({
   marginTop: 30,
   marginLeft: 0,
 })
+const Announce = styled.div`
+  display: 'inline';
+  margin-top: '100px';
+`
+const AnnounceButton = styled(CardActions)({
+  marginLeft: 700,
+  marginTop: 10,
+})
+const InputForm = styled.div({
+  marginTop: 20,
+})
 function DetailClassroom() {
   const [classroom, setClassroom] = useState('')
   const [copyLink, setCopyLink] = useState(false)
   const [showInput, setShowInput] = useState(false)
-
+  const [inputValue, setInputValue] = useState('')
   let { id } = useParams()
   useEffect(() => {
     async function fetchData() {
@@ -111,13 +125,44 @@ function DetailClassroom() {
           </Grid>
           <Grid item xs={9}>
             <WorkCard>
-              <Typography gutterBottom variant="h5" component="div">
-                Announce something to your class
-              </Typography>
-              <CardActions>
-                <Button size="small">cancel</Button>
-                <Button size="small">post</Button>
-              </CardActions>
+              {showInput ? (
+                <div>
+                  <div>
+                    <TextField
+                      multiline
+                      label="announce something to your class"
+                      variant="filled"
+                      value={inputValue}
+                      onChange={(e) => setInputValue(e.target.value)}
+                      fullWidth
+                    ></TextField>
+                  </div>
+                  <InputForm>
+                    <Input type="file" variant="outline"></Input>
+                  </InputForm>
+                  <div>
+                    <AnnounceButton>
+                      <Button size="small" onClick={() => setShowInput(false)}>
+                        cancel
+                      </Button>
+                      <Button size="small">post</Button>
+                    </AnnounceButton>
+                  </div>
+                </div>
+              ) : (
+                <Announce onClick={() => setShowInput(true)}>
+                  <CardHeader
+                    action={
+                      <IconButton aria-label="settings">
+                        <Avatar />
+                      </IconButton>
+                    }
+                  ></CardHeader>
+                  <Typography sx={{ mt: 3 }} variant="h4">
+                    Announce something to your class
+                  </Typography>
+                </Announce>
+              )}
             </WorkCard>
           </Grid>
         </Grid>
