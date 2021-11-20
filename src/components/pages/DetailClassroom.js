@@ -40,21 +40,18 @@ const WorkCard = styled(Card)({
 function DetailClassroom() {
   const [classroom, setClassroom] = useState('')
   const [copyLink, setCopyLink] = useState(false)
+  const [showInput, setShowInput] = useState(false)
 
   let { id } = useParams()
   useEffect(() => {
     async function fetchData() {
       const results = await axiosClient.get(`/api/classrooms/${id}`)
-      console.log(results.data)
 
       setClassroom(results.data)
     }
 
     fetchData()
   }, [])
-  const handleCopyLink = () => {
-    console.log(copyLink)
-  }
   return (
     <Layout>
       <MyContainer>

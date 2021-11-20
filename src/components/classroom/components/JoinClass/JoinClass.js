@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Dialog from '@mui/material/Dialog'
 import { Close } from '@mui/icons-material'
 import { Button, TextField } from '@mui/material'
 import styled from '@emotion/styled'
+import { useLocation, Link, useHistory } from 'react-router-dom'
 const Container = styled.div`
   font-family: Roboto, Arial, sans-serif;
   font-size: 14px;
@@ -76,7 +77,16 @@ const TopHead = styled.div`
 `
 const JoinClass = (props) => {
   const { joinClassDialog, setJoinClassDialog } = props
+  const [classCode, setClassCode] = useState('')
+  const [ownerCode, setOwnerCode] = useState('')
 
+  const history = useHistory()
+  const handleChangeClassCode = (e) => {
+    setClassCode(e.target.value)
+  }
+  const handleChangeOwnerEmail = (e) => {
+    setOwnerCode(e.target.value)
+  }
   return (
     <Dialog
       fullScreen
@@ -89,7 +99,12 @@ const JoinClass = (props) => {
             <JoinClassIconClose />
           </JoinClassWrapper2>
           <TopHead>Join class</TopHead>
-          <JoinClassBtn variant="contained" color="primary">
+          <JoinClassBtn
+            type="submit"
+            variant="contained"
+            color="primary"
+            onClick={() => history.push(`/classrooms/join?id=${classCode}`)}
+          >
             Join
           </JoinClassBtn>
         </JoinClassWrapper>
@@ -101,11 +116,13 @@ const JoinClass = (props) => {
               id="outlined-basic"
               label="class-code"
               variant="outlined"
+              onChange={handleChangeClassCode}
             />
             <TextField
               id="outlined-basic"
               label="Owner email"
               variant="outlined"
+              onChange={handleChangeOwnerEmail}
             />
           </LogInfo>
         </JoinClassForm>
