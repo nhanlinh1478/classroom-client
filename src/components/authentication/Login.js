@@ -69,6 +69,9 @@ export default function SignIn() {
         axiosClient.defaults.headers.common[
           'Authorization'
         ] = `Bearer ${localStorage.getItem('token')}`
+
+        const { user } = response.data
+        dispatch(userLogin(user))
         history.push('/home')
         dispatch(userLogin())
       }
@@ -76,7 +79,7 @@ export default function SignIn() {
         setMsg({ err: response.data.message, success: '' })
       }
     } catch (err) {
-      err.response.data.msg &&
+      err.response.data.message &&
         setMsg({ err: err.response.data.message, success: '' })
     }
     setDisabled(false)
@@ -93,7 +96,13 @@ export default function SignIn() {
         axiosClient.defaults.headers.common[
           'Authorization'
         ] = `Bearer ${localStorage.getItem('token')}`
+<<<<<<< HEAD
         dispatch(userLogin())
+=======
+
+        const { user } = res.data
+        dispatch(userLogin(user))
+>>>>>>> 5083ada360cd6f56e7fcab9786b83000f45c4230
         history.push('/home')
       }
       if (!res.data.success) {
