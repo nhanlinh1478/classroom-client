@@ -81,9 +81,8 @@ const Header = ({ children }) => {
           <HeaderWrapper>
             {children}
             <img
-              src="http://www.fit.hcmus.edu.vn/cdio/images/cdio.gif"
+              src="https://www.gstatic.com/images/branding/googlelogo/svg/googlelogo_clr_74x24px.svg"
               alt="Classroom"
-              sx={{ marginTop: '20px' }}
             />
             <Typography variant="h6">Classroom</Typography>
           </HeaderWrapper>

@@ -116,12 +116,14 @@ const JoinClass = (props) => {
               id="outlined-basic"
               label="class-code"
               variant="outlined"
+              inputProps={{ maxLength: 12 }}
               onChange={handleChangeClassCode}
             />
             <TextField
               id="outlined-basic"
               label="Owner email"
               variant="outlined"
+              inputProps={{ maxLength: 12 }}
               onChange={handleChangeOwnerEmail}
             />
           </LogInfo>
