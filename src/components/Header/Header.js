@@ -8,7 +8,6 @@ import JoinClass from '../classroom/components/JoinClass/JoinClass'
 import styled from '@emotion/styled'
 import { useHistory } from 'react-router-dom'
 import { IconButton } from '@mui/material'
-import { AccountCircle } from '@mui/icons-material'
 
 const HeaderWrapper = styled.div({
   display: 'flex',
@@ -82,8 +81,9 @@ const Header = ({ children }) => {
           <HeaderWrapper>
             {children}
             <img
-              src="https://www.gstatic.com/images/branding/googlelogo/svg/googlelogo_clr_74x24px.svg"
+              src="http://www.fit.hcmus.edu.vn/cdio/images/cdio.gif"
               alt="Classroom"
+              sx={{ marginTop: '20px' }}
             />
             <Typography variant="h6">Classroom</Typography>
           </HeaderWrapper>
