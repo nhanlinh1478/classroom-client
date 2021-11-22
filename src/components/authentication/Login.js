@@ -96,13 +96,9 @@ export default function SignIn() {
         axiosClient.defaults.headers.common[
           'Authorization'
         ] = `Bearer ${localStorage.getItem('token')}`
-<<<<<<< HEAD
-        dispatch(userLogin())
-=======
 
         const { user } = res.data
         dispatch(userLogin(user))
->>>>>>> 5083ada360cd6f56e7fcab9786b83000f45c4230
         history.push('/home')
       }
       if (!res.data.success) {

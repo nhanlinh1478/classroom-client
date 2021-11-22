@@ -69,6 +69,7 @@ export default function Form({ addClassroom }) {
           color="secondary"
           fullWidth
           required
+          inputProps={{ maxLength: 100 }}
           error={nameErr}
         />
         <TextField
@@ -78,6 +79,7 @@ export default function Form({ addClassroom }) {
           color="secondary"
           fullWidth
           required
+          inputProps={{ maxLength: 100 }}
           error={sectionErr}
         ></TextField>
         <TextField
@@ -87,6 +89,7 @@ export default function Form({ addClassroom }) {
           color="secondary"
           fullWidth
           required
+          inputProps={{ maxLength: 100 }}
           error={subjectErr}
         ></TextField>
       </div>

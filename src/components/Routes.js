@@ -17,10 +17,6 @@ import JoinClassroom from './classroom/JoinClassroom'
 import AcceptInvite from './classroom/AcceptInvite'
 import UserList from './classroom/UserList'
 import Profile from './Profile'
-<<<<<<< HEAD
-=======
-
->>>>>>> 5083ada360cd6f56e7fcab9786b83000f45c4230
 export default function Routes() {
   return (
     <Router>
@@ -41,10 +37,6 @@ export default function Routes() {
           <ProtectedRoute exact path="/home" component={Home} />
           <ProtectedRoute path="/about" component={About} />
           <ProtectedRoute path="/profile" component={Profile} />
-<<<<<<< HEAD
-          <ProtectedRoute path="/classrooms/join" component={JoinClassroom} />
-
-=======
           <ProtectedRoute
             exact
             path="/classrooms/join"
@@ -55,7 +47,6 @@ export default function Routes() {
             path="/classrooms/join/accept-token"
             component={AcceptInvite}
           />
->>>>>>> 5083ada360cd6f56e7fcab9786b83000f45c4230
           <ProtectedRoute
             exact
             path="/classrooms/:id"
