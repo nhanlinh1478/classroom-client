@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
-import axiosClient from '../../axiosClient'
+import axiosClient from '../axiosClient'
 
 export const fetchClassrooms = createAsyncThunk(
   'classrooms/fetchClassrooms',
@@ -14,7 +14,6 @@ export const createClassroom = createAsyncThunk(
   'classrooms/createClassroom',
   async (classroom) => {
     const response = await axiosClient.post('api/classrooms', classroom)
-    console.log(response.data)
     return response.data
   }
 )
