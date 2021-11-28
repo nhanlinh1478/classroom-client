@@ -8,45 +8,31 @@ import {
   CardContent,
   List,
   ListItem,
+  IconButton,
+  CardHeader,
 } from '@mui/material'
 import Layout from 'src/Layout/Layout'
 import GradeCard from './GradeCard'
-const GradeStructure = [
-  {
-    id: '1',
-    gradeTitle: 'Bai tap 1',
-    gradeDetail: '1',
-  },
-  {
-    id: '2',
-    gradeTitle: 'Bai tap 2',
-    gradeDetail: '2',
-  },
-  {
-    id: '3',
-    gradeTitle: 'Bai tap 3',
-    gradeDetail: '1',
-  },
-  {
-    id: '4',
-    gradeTitle: 'Giua ky',
-    gradeDetail: '3',
-  },
-  {
-    id: '5',
-    gradeTitle: 'Cuoi ky',
-    gradeDetail: '4',
-  },
-]
-const GradeAssignment = () => {
-  const [listgrade, setListgrade] = useState(GradeStructure)
+import { useHistory } from 'react-router'
+import { ArrowBackIosNew } from '@mui/icons-material'
+import { useDispatch, useSelector } from 'react-redux'
+import { updateGrades } from 'src/redux/gradeSlice'
 
+const GradeAssignment = () => {
+  const classroomGrades = useSelector((state) => state.grades.grades)
+  const [listgrade, setListgrade] = useState(classroomGrades)
+  const history = useHistory()
+  const dispatch = useDispatch()
   const handleOnDragEnd = (result) => {
     if (!result.destination) return
     const item = Array.from(listgrade)
     const [reorderedItem] = item.splice(result.source.index, 1)
     item.splice(result.destination.index, 0, reorderedItem)
     setListgrade(item)
+    dispatch(updateGrades(item))
+  }
+  const goBack = () => {
+    history.goBack()
   }
   return (
     <Layout>
@@ -59,8 +45,15 @@ const GradeAssignment = () => {
         }}
       >
         <Card sx={{ minWidth: 650 }}>
+          <CardHeader
+            avatar={
+              <IconButton onClick={goBack}>
+                <ArrowBackIosNew />
+              </IconButton>
+            }
+            title={<Typography variant="h3">Grade Structure</Typography>}
+          />
           <CardContent>
-            <Typography variant="h3">Grade Structure</Typography>
             <Typography
               sx={{ fontSize: 14 }}
               color="text.secondary"

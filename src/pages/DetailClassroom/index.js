@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Layout from '../../Layout/Layout'
 import axiosClient from '../../axiosClient'
-import { useParams, useHistory } from 'react-router-dom'
+import { useParams, useHistory, useRouteMatch } from 'react-router-dom'
 import styled from '@emotion/styled'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import { Link } from 'react-router-dom'
@@ -20,10 +20,42 @@ import {
   Avatar,
   TextField,
   Input,
+  List,
+  ListItem,
 } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { userSetRole } from 'src/redux/userSlice'
+import { updateGrades } from 'src/redux/gradeSlice'
 
+//Fake data
+const GradeStructure = [
+  {
+    id: '1',
+    gradeTitle: 'Bai tap 1',
+    gradeDetail: '1',
+  },
+  {
+    id: '2',
+    gradeTitle: 'Bai tap 2',
+    gradeDetail: '2',
+  },
+  {
+    id: '3',
+    gradeTitle: 'Bai tap 3',
+    gradeDetail: '1',
+  },
+  {
+    id: '4',
+    gradeTitle: 'Giua ky',
+    gradeDetail: '3',
+  },
+  {
+    id: '5',
+    gradeTitle: 'Cuoi ky',
+    gradeDetail: '4',
+  },
+]
+//
 const MyContainer = styled(Container)({
   marginTop: '30px',
 })
@@ -58,12 +90,17 @@ function DetailClassroom() {
   const history = useHistory()
   const dispatch = useDispatch()
   const userRole = useSelector((state) => state.user.role)
+  const classroomGrades = useSelector((state) => state.grades.grades)
   let { id } = useParams()
+  let { url } = useRouteMatch()
   useEffect(() => {
     async function fetchData() {
       try {
         const results = await axiosClient.get(`/api/classrooms/${id}`)
         dispatch(userSetRole(results.data.userRole))
+        if (!classroomGrades) {
+          dispatch(updateGrades(GradeStructure))
+        }
         setClassroom(results.data.classroom)
       } catch (error) {
         console.log(error)
@@ -101,6 +138,44 @@ function DetailClassroom() {
       </LinkCard>
     )
   }
+  const showGradeStructure = (grades) => {
+    return (
+      <LinkCard>
+        <CardContent>
+          <CardHeader
+            action={
+              <IconButton aria-label="settings">
+                <MoreVertIcon />
+              </IconButton>
+            }
+            title="Grade Structure"
+          >
+            <MoreVertIcon sx={{ mt: 3 }} />
+          </CardHeader>
+          {!grades ? (
+            <Typography variant="h6" color="text.secondary">
+              No Grade Structure
+            </Typography>
+          ) : (
+            <List>
+              {grades.map((grades) => (
+                <ListItem key={grades.id}>
+                  <Typography variant="h6" color="text.secondary">
+                    {grades.gradeTitle}: {grades.gradeDetail}
+                  </Typography>
+                </ListItem>
+              ))}
+            </List>
+          )}
+        </CardContent>
+        <CardActions>
+          <Button size="small" onClick={handleEditGrade}>
+            Edit grade
+          </Button>
+        </CardActions>
+      </LinkCard>
+    )
+  }
   const showNotification = (info) => {
     return (
       <LinkCard>
@@ -124,7 +199,7 @@ function DetailClassroom() {
   }
   const handleEditGrade = (event) => {
     event.preventDefault()
-    history.push('/gradeStructure')
+    history.push(`${url}/gradeStructure`)
   }
   return (
     <Layout>
@@ -159,9 +234,7 @@ function DetailClassroom() {
           <Grid item xs={3}>
             {userRole === 'TEACHER' && showClassCode(classroom.id)}
             {userRole === 'STUDENT' && showNotification('Some Information')}
-            <Button size="small" onClick={handleEditGrade}>
-              Edit grade
-            </Button>
+            {showGradeStructure(classroomGrades)}
           </Grid>
           <Grid item xs={9}>
             <WorkCard>
