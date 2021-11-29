@@ -19,7 +19,7 @@ const FormButtonRemove = styled(Button)({
   borderRadius: '0px 0px 4px 0px',
 })
 export default function GradeCard({ grade }) {
-  const { gradeTitle, id, gradeDetail } = grade
+  const { name, id, point } = grade
   return (
     <Card sx={{ minWidth: 650, maxWidth: 650, m: 1 }}>
       <Grid
@@ -36,7 +36,7 @@ export default function GradeCard({ grade }) {
               variant="outlined"
               disabled={true}
               label="Grade Title"
-              defaultValue={gradeTitle}
+              defaultValue={name}
             ></TextField>
           </CardContent>
           <CardContent sx={{ marginTop: -2 }}>
@@ -45,7 +45,7 @@ export default function GradeCard({ grade }) {
               variant="outlined"
               disabled={true}
               label="Grade Detail"
-              defaultValue={gradeDetail}
+              defaultValue={point}
             ></TextField>
           </CardContent>
         </Grid>

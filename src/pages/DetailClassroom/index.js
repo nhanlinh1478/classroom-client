@@ -25,37 +25,8 @@ import {
 } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { userSetRole } from 'src/redux/userSlice'
-import { updateGrades } from 'src/redux/gradeSlice'
+import { fetchGrades, sortGrades } from 'src/redux/gradeSlice'
 
-//Fake data
-const GradeStructure = [
-  {
-    id: '1',
-    gradeTitle: 'Bai tap 1',
-    gradeDetail: '1',
-  },
-  {
-    id: '2',
-    gradeTitle: 'Bai tap 2',
-    gradeDetail: '2',
-  },
-  {
-    id: '3',
-    gradeTitle: 'Bai tap 3',
-    gradeDetail: '1',
-  },
-  {
-    id: '4',
-    gradeTitle: 'Giua ky',
-    gradeDetail: '3',
-  },
-  {
-    id: '5',
-    gradeTitle: 'Cuoi ky',
-    gradeDetail: '4',
-  },
-]
-//
 const MyContainer = styled(Container)({
   marginTop: '30px',
 })
@@ -90,7 +61,7 @@ function DetailClassroom() {
   const history = useHistory()
   const dispatch = useDispatch()
   const userRole = useSelector((state) => state.user.role)
-  const classroomGrades = useSelector((state) => state.grades.grades)
+  const classroomGrades = useSelector((state) => state.grades)
   let { id } = useParams()
   let { url } = useRouteMatch()
   useEffect(() => {
@@ -98,8 +69,18 @@ function DetailClassroom() {
       try {
         const results = await axiosClient.get(`/api/classrooms/${id}`)
         dispatch(userSetRole(results.data.userRole))
-        if (!classroomGrades) {
-          dispatch(updateGrades(GradeStructure))
+        //check grades was store redux
+        if (
+          classroomGrades.classroomId === null ||
+          classroomGrades.classroomId !== id
+        ) {
+          dispatch(
+            fetchGrades({
+              Grades: results.data.classroom.Grades,
+              classroomId: results.data.classroom.id,
+            })
+          )
+          dispatch(sortGrades())
         }
         setClassroom(results.data.classroom)
       } catch (error) {
@@ -152,7 +133,7 @@ function DetailClassroom() {
           >
             <MoreVertIcon sx={{ mt: 3 }} />
           </CardHeader>
-          {!grades ? (
+          {!grades.length ? (
             <Typography variant="h6" color="text.secondary">
               No Grade Structure
             </Typography>
@@ -160,9 +141,23 @@ function DetailClassroom() {
             <List>
               {grades.map((grades) => (
                 <ListItem key={grades.id}>
-                  <Typography variant="h6" color="text.secondary">
-                    {grades.gradeTitle}: {grades.gradeDetail}
-                  </Typography>
+                  <Grid
+                    container
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <Grid item>
+                      <Typography variant="h6" color="text.secondary">
+                        {grades.name}
+                      </Typography>
+                    </Grid>
+                    <Grid item>
+                      <Typography variant="h6" color="text.secondary">
+                        {grades.point}
+                      </Typography>
+                    </Grid>
+                  </Grid>
                 </ListItem>
               ))}
             </List>
@@ -234,7 +229,7 @@ function DetailClassroom() {
           <Grid item xs={3}>
             {userRole === 'TEACHER' && showClassCode(classroom.id)}
             {userRole === 'STUDENT' && showNotification('Some Information')}
-            {showGradeStructure(classroomGrades)}
+            {showGradeStructure(classroomGrades.grades)}
           </Grid>
           <Grid item xs={9}>
             <WorkCard>

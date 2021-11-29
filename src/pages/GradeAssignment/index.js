@@ -16,11 +16,11 @@ import GradeCard from './GradeCard'
 import { useHistory } from 'react-router'
 import { ArrowBackIosNew } from '@mui/icons-material'
 import { useDispatch, useSelector } from 'react-redux'
-import { updateGrades } from 'src/redux/gradeSlice'
+import { arrangeGrade, updateGrades } from 'src/redux/gradeSlice'
 
 const GradeAssignment = () => {
-  const classroomGrades = useSelector((state) => state.grades.grades)
-  const [listgrade, setListgrade] = useState(classroomGrades)
+  const classroomGrades = useSelector((state) => state.grades)
+  const [listgrade, setListgrade] = useState(classroomGrades.grades)
   const history = useHistory()
   const dispatch = useDispatch()
   const handleOnDragEnd = (result) => {
@@ -29,7 +29,13 @@ const GradeAssignment = () => {
     const [reorderedItem] = item.splice(result.source.index, 1)
     item.splice(result.destination.index, 0, reorderedItem)
     setListgrade(item)
-    dispatch(updateGrades(item))
+    dispatch(
+      arrangeGrade({
+        id1: listgrade[result.source.index].id,
+        id2: listgrade[result.destination.index].id,
+        classroomId: classroomGrades.classroomId,
+      })
+    )
   }
   const goBack = () => {
     history.goBack()
@@ -74,7 +80,7 @@ const GradeAssignment = () => {
                 {listgrade.map((grades, index) => (
                   <Draggable
                     key={grades.id}
-                    draggableId={grades.id}
+                    draggableId={grades.id.toString()}
                     index={index}
                   >
                     {(provided) => (
