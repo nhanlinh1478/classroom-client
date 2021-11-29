@@ -9,6 +9,7 @@ import {
   ListItem,
   IconButton,
   Button,
+  CardHeader,
 } from '@mui/material'
 import { Add as AddIcon } from '@mui/icons-material'
 import Layout from 'src/Layout/Layout'
@@ -17,6 +18,10 @@ import { nanoid } from '@reduxjs/toolkit'
 import styled from '@emotion/styled'
 import axiosClient from 'src/axiosClient'
 import { useParams } from 'react-router-dom'
+import { useHistory } from 'react-router'
+import { ArrowBackIosNew } from '@mui/icons-material'
+import { useDispatch, useSelector } from 'react-redux'
+import { arrangeGrade, updateGrades } from 'src/redux/gradeSlice'
 
 const CustomCard = styled(Card)`
   &.sticky {
@@ -27,15 +32,29 @@ const CustomCard = styled(Card)`
 `
 
 const GradeAssignment = () => {
-  const [assignments, setAssignments] = useState([])
+  const classroomGrades = useSelector((state) => state.grades)
+  const [listgrade, setListgrade] = useState(classroomGrades.grades)
   const { id } = useParams()
+  const history = useHistory()
+  const dispatch = useDispatch()
 
   const handleOnDragEnd = (result) => {
     if (!result.destination) return
-    const item = Array.from(assignments)
+    const item = Array.from(listgrade)
     const [reorderedItem] = item.splice(result.source.index, 1)
     item.splice(result.destination.index, 0, reorderedItem)
-    setAssignments(item)
+    setListgrade(item)
+    dispatch(
+      arrangeGrade({
+        id1: listgrade[result.source.index].id,
+        id2: listgrade[result.destination.index].id,
+        classroomId: classroomGrades.classroomId,
+      })
+    )
+  }
+
+  const goBack = () => {
+    history.goBack()
   }
 
   const addNewAssignment = () => {
@@ -45,21 +64,20 @@ const GradeAssignment = () => {
       point: '',
       isNew: true,
     }
-
-    setAssignments((prevState) => [...prevState, newAssignment])
+    setListgrade((prevState) => [...prevState, newAssignment])
   }
 
   useEffect(() => {
     const fetchData = async () => {
       const response = await axiosClient.get(`/api/classrooms/${id}/grades`)
-      setAssignments(response.data)
+      setListgrade(response.data)
     }
 
     fetchData()
   }, [])
 
   const updateAssignment = (id, newAssignment) => {
-    setAssignments((prevState) => {
+    setListgrade((prevState) => {
       const newAssignments = [...prevState]
       let index = newAssignments.findIndex((assignment) => assignment.id === id)
       newAssignments[index] = newAssignment
@@ -68,7 +86,7 @@ const GradeAssignment = () => {
   }
 
   const deleteAssignment = (id) => {
-    setAssignments((prevState) =>
+    setListgrade((prevState) =>
       prevState.filter((assignment) => assignment.id !== id)
     )
   }
@@ -84,8 +102,15 @@ const GradeAssignment = () => {
         }}
       >
         <CustomCard sx={{ minWidth: 650 }} className={`sticky`}>
+          <CardHeader
+            avatar={
+              <IconButton onClick={goBack}>
+                <ArrowBackIosNew />
+              </IconButton>
+            }
+            title={<Typography variant="h3">Grade Structure</Typography>}
+          />
           <CardContent>
-            <Typography variant="h3">Grade Structure</Typography>
             <Typography
               sx={{ fontSize: 14 }}
               color="text.secondary"
@@ -107,7 +132,7 @@ const GradeAssignment = () => {
                   {...provided.droppableProps}
                   ref={provided.innerRef}
                 >
-                  {assignments.map((assignment, index) => (
+                  {listgrade.map((assignment, index) => (
                     <Draggable
                       key={assignment.id}
                       draggableId={assignment.id.toString()}
