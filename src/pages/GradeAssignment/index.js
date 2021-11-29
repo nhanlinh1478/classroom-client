@@ -1,5 +1,10 @@
 import React, { useState } from 'react'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
+import { useParams } from 'react-router'
+import axiosClient from '../../axiosClient'
+import { useDispatch } from 'react-redux'
+import { createGrade, fetchGrades } from 'src/redux/gradeSlice'
+import { useEffect } from 'react'
 import {
   Card,
   Box,
@@ -11,34 +16,45 @@ import {
 } from '@mui/material'
 import Layout from 'src/Layout/Layout'
 import GradeCard from './GradeCard'
+
 const GradeStructure = [
-  {
-    id: '1',
-    gradeTitle: 'Bai tap 1',
-    gradeDetail: '1',
-  },
-  {
-    id: '2',
-    gradeTitle: 'Bai tap 2',
-    gradeDetail: '2',
-  },
-  {
-    id: '3',
-    gradeTitle: 'Bai tap 3',
-    gradeDetail: '1',
-  },
-  {
-    id: '4',
-    gradeTitle: 'Giua ky',
-    gradeDetail: '3',
-  },
-  {
-    id: '5',
-    gradeTitle: 'Cuoi ky',
-    gradeDetail: '4',
-  },
+  // {
+  //   id: '1',
+  //   gradeTitle: 'Bai tap 1',
+  //   gradeDetail: '1',
+  // },
+  // {
+  //   id: '2',
+  //   gradeTitle: 'Bai tap 2',
+  //   gradeDetail: '2',
+  // },
+  // {
+  //   id: '3',
+  //   gradeTitle: 'Bai tap 3',
+  //   gradeDetail: '1',
+  // },
+  // {
+  //   id: '4',
+  //   gradeTitle: 'Giua ky',
+  //   gradeDetail: '3',
+  // },
+  // {
+  //   id: '5',
+  //   gradeTitle: 'Cuoi ky',
+  //   gradeDetail: '4',
+  // },
 ]
 const GradeAssignment = () => {
+  const dispatch = useDispatch()
+  const addGrade = async ({ gradeName, gradePoint }) => {
+    dispatch(createGrade({ name: gradeName, point: gradePoint }))
+  }
+  // useEffect(() => {
+  //   async function fetchGrades() {
+  //     dispatch(fetchGrades())
+  //   }
+  //   fetchGrades()
+  // }, [dispatch])
   const [listgrade, setListgrade] = useState(GradeStructure)
 
   const handleOnDragEnd = (result) => {
@@ -90,7 +106,7 @@ const GradeAssignment = () => {
                         {...provided.dragHandleProps}
                         ref={provided.innerRef}
                       >
-                        <GradeCard grade={grades} />
+                        <GradeCard addGrade={addGrade} />
                       </ListItem>
                     )}
                   </Draggable>
