@@ -16,6 +16,11 @@ import InviteModal from './InviteModal'
 import Layout from '../../Layout/Layout'
 import styled from '@emotion/styled'
 import { useSelector } from 'react-redux'
+import ReactExport from 'react-data-export'
+import _ from 'lodash'
+import lodashGet from 'lodash/get'
+const ExcelFile = ReactExport.ExcelFile
+const ExcelSheet = ReactExport.ExcelFile.ExcelSheet
 
 const Header = styled('div')`
   display: flex;
@@ -32,12 +37,16 @@ const UserList = () => {
   const { id } = useParams()
   const userRole = useSelector((state) => state.user.role)
   const history = useHistory()
-
+  const [exportData, setExportData] = useState([])
   useEffect(() => {
     const fetchUserClassrooms = async () => {
       try {
         const response = await axiosClient.get(`/api/classrooms/${id}/users`)
         setUsers(response.data)
+        const UserExport = response.data.filter(
+          (user) => user.role === 'STUDENT'
+        )
+        setExportData(UserExport)
       } catch (error) {
         setErrorMsg(error.response.data.message)
       }
@@ -70,11 +79,36 @@ const UserList = () => {
 
   const showButtonInvite = (nameButton, role) => {
     return (
-      <Button onClick={() => handleOpenInviteModal(role)}>
-        {nameButton} <AddSharp />
-      </Button>
+      <>
+        <Button onClick={() => handleOpenInviteModal(role)}>
+          {nameButton} <AddSharp />
+        </Button>
+      </>
     )
   }
+
+  const userData = exportData.map((user) =>
+    _.pick(user, ['User.username', 'User.studentId'])
+  )
+  const multiDataSet = [
+    {
+      columns: [
+        { title: 'username', width: { wch: 50 } },
+        { title: 'studentID', width: { wch: 20 } }, //char width
+      ],
+      data: userData.map((user) => [
+        {
+          value: lodashGet(user, 'User.username'),
+          style: { font: { outline: true } },
+        },
+        {
+          value: lodashGet(user, 'User.studentId'),
+          style: { font: { outline: true } },
+        },
+      ]),
+    },
+  ]
+
   const renderTeachersList = () => {
     return (
       <Grid>
@@ -82,6 +116,7 @@ const UserList = () => {
           <Typography sx={{ mt: 2, mb: 2 }} variant="h6" component="div">
             Teacher
           </Typography>
+
           {userRole === 'TEACHER' &&
             showButtonInvite('Invite TEACHER ', 'TEACHER')}
         </Box>
@@ -97,7 +132,20 @@ const UserList = () => {
       </Grid>
     )
   }
-
+  const renderExcelFile = () => {
+    return (
+      <ExcelFile
+        filename="classroom"
+        element={
+          <Button variant="outlined" sx={{ ml: 3 }}>
+            Export Data
+          </Button>
+        }
+      >
+        <ExcelSheet dataSet={multiDataSet} name="user-list" />
+      </ExcelFile>
+    )
+  }
   const renderStudentsList = () => {
     return (
       <Grid sx={{ flexGrow: 1, maxWidth: '100%' }}>
@@ -134,6 +182,7 @@ const UserList = () => {
             <Typography sx={{ mt: 2, mb: 2 }} variant="h6" component="div">
               List Users
             </Typography>
+            {userRole === 'TEACHER' && renderExcelFile()}
           </Header>
           {renderTeachersList()}
           {renderStudentsList()}
