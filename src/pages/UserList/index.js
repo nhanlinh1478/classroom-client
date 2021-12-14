@@ -79,11 +79,9 @@ const UserList = () => {
 
   const showButtonInvite = (nameButton, role) => {
     return (
-      <>
-        <Button onClick={() => handleOpenInviteModal(role)}>
-          {nameButton} <AddSharp />
-        </Button>
-      </>
+      <Button onClick={() => handleOpenInviteModal(role)}>
+        {nameButton} <AddSharp />
+      </Button>
     )
   }
 
