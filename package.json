@@ -8,6 +8,7 @@
     "@mui/icons-material": "^5.0.4",
     "@mui/material": "^5.0.4",
     "@mui/styles": "^5.1.0",
+    "@mui/x-data-grid": "^5.2.0",
     "@reduxjs/toolkit": "^1.6.2",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
@@ -17,8 +18,13 @@
     "react": "^17.0.2",
     "react-beautiful-dnd": "^13.1.0",
     "react-copy-to-clipboard": "^5.0.4",
+<<<<<<< HEAD
     "react-csv": "^2.0.3",
     "react-data-export": "^0.6.0",
+=======
+    "react-data-export": "^0.6.0",
+    "react-csv": "^2.0.3",
+>>>>>>> 3cbb2f7ff8f64cd0e43bfaaae437b09e29b29a77
     "react-dom": "^17.0.2",
     "react-google-login": "^5.2.2",
     "react-papaparse": "^3.18.1",
