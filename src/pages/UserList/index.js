@@ -57,7 +57,6 @@ const UserList = () => {
           (user) => user.role === 'STUDENT'
         )
         setExportData(UserExport)
-        updateUserImport()
       } catch (error) {
         setErrorMsg(error.response.data.message)
       }
@@ -111,19 +110,16 @@ const UserList = () => {
   for (let i = 0; i < userId.length; i++) {
     _.extend(dataArr[i], userId[i])
   }
-  const updateUserImport = () => {
+
+  console.log('userCanUpdate:', dataArr)
+  const updateUserImport = async () => {
     try {
-      dataArr.map((user) => {
-        const response = axiosClient.put(`/api/user/${user.id}`, {
-          firstName: user.firstName,
-          lastName: user.lastName,
-          studentId: user.studentId,
-        })
-      })
+      await axiosClient.post('/api/user/allUser', { dataArr })
     } catch (error) {
       console.log(error)
     }
   }
+  updateUserImport()
   const csvReport = {
     data: userData,
     headers: headersCSV,
