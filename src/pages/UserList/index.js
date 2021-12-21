@@ -111,7 +111,6 @@ const UserList = () => {
     _.extend(dataArr[i], userId[i])
   }
 
-  console.log('userCanUpdate:', dataArr)
   const updateUserImport = async (data) => {
     try {
       await axiosClient.post('/api/user/allUser', data)
