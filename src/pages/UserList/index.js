@@ -112,14 +112,14 @@ const UserList = () => {
   }
 
   console.log('userCanUpdate:', dataArr)
-  const updateUserImport = async () => {
+  const updateUserImport = async (data) => {
     try {
-      await axiosClient.post('/api/user/allUser', { dataArr })
+      await axiosClient.post('/api/user/allUser', data)
     } catch (error) {
       console.log(error)
     }
   }
-  updateUserImport()
+
   const csvReport = {
     data: userData,
     headers: headersCSV,
@@ -143,9 +143,7 @@ const UserList = () => {
         reject(error)
       }
     })
-    promise.then((d) => {
-      console.log('dataLog:', d)
-    })
+    return promise
   }
   const RenderCSVReader = () => {
     return (
@@ -153,9 +151,10 @@ const UserList = () => {
         <CSVrender>
           <input
             type="file"
-            onChange={(e) => {
+            onChange={async (e) => {
               const file = e.target.files[0]
-              readExcel(file)
+              const uploadedData = await readExcel(file)
+              updateUserImport(uploadedData)
             }}
           ></input>
         </CSVrender>
