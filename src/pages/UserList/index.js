@@ -23,7 +23,6 @@ import * as XLSX from 'xlsx'
 const headersCSV = [
   { label: 'firstName', key: 'User.firstName' },
   { label: 'lastName', key: 'User.lastName' },
-  { label: 'email', key: 'User.email' },
   { label: 'studentId', key: 'User.studentId' },
 ]
 
@@ -95,12 +94,7 @@ const UserList = () => {
   }
 
   const userData = exportData.map((user) =>
-    _.pick(user, [
-      'User.firstName',
-      'User.lastName',
-      'User.email',
-      'User.studentId',
-    ])
+    _.pick(user, ['User.firstName', 'User.lastName', 'User.studentId'])
   )
   const userId = exportData.map((user) => _.pick(user, ['User.id']))
   for (let i = 0; i < userId.length; i++) {
