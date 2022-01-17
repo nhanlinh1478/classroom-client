@@ -80,10 +80,6 @@ export default function Profile() {
     firstName: Yup.string().min(3, 'Too Short!').max(50, 'Too Long!'),
     lastName: Yup.string().min(3, 'Too Short!').max(50, 'Too Long!'),
     phone: Yup.string().min(5, 'Too short').max(15, 'Too Long'),
-    studentId: Yup.string()
-      .min(2, 'Too short')
-      .max(10, 'Too long')
-      .required('studentID is requied'),
   })
   const formik = useFormik({
     initialValues: {
