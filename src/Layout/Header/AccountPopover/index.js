@@ -1,7 +1,6 @@
 import { useRef, useState } from 'react'
 import HomeIcon from '@mui/icons-material/Home'
 import PersonIcon from '@mui/icons-material/Person'
-import SettingsIcon from '@mui/icons-material/Settings'
 import { Link as RouterLink } from 'react-router-dom'
 import { alpha } from '@mui/material/styles'
 import {
@@ -20,6 +19,7 @@ import accountDefault from 'src/_mocks_/account'
 import { useHistory } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { userLogout } from 'src/redux/userSlice'
+import { disconnectSocket } from 'src/socket'
 
 export default function AccountPopover() {
   const anchorRef = useRef(null)
@@ -27,17 +27,22 @@ export default function AccountPopover() {
   const user = useSelector((state) => state.user.user)
   const dispatch = useDispatch()
   const history = useHistory()
+
   const handleOpen = () => {
     setOpen(true)
   }
+
   const handleClose = () => {
     setOpen(false)
   }
+
   const handleLogout = () => {
     localStorage.clear()
+    disconnectSocket()
     history.push('/login')
     dispatch(userLogout())
   }
+
   return (
     <>
       <IconButton
