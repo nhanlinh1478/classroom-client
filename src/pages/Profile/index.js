@@ -10,14 +10,17 @@ import {
   TextField,
   Button,
 } from '@mui/material'
-import { createTheme, ThemeProvider } from '@mui/material/styles'
 import { styled } from '@mui/styles'
 import Layout from '../../Layout/Layout'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchUser, updateUser } from 'src/redux/userSlice'
 import { showErrMsg } from '../../utils/Notifications'
 import accountDefault from 'src/_mocks_/account'
-import { CSVLink, CSVDownload } from 'react-csv'
+import * as Yup from 'yup'
+import { useFormik, FormikProvider } from 'formik'
+import { useSnackbar } from 'notistack'
+import get from 'lodash/get'
+import { LoadingButton } from '@mui/lab'
 const MyBox = styled(Box)({
   borderRadius: 3,
   boxShadow: '#091e42 0px 1px 1px 0px',
@@ -47,8 +50,9 @@ const WrapInforInput = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(1),
   color: '#172b4d',
 }))
-const theme = createTheme()
+
 export default function Profile() {
+  const { enqueueSnackbar } = useSnackbar()
   const dispatch = useDispatch()
   const auth = useSelector((state) => state.user)
   const user = useSelector((state) => state.user.user)
@@ -64,20 +68,6 @@ export default function Profile() {
     setIsEdit(true)
     setInputDisabled(false)
   }
-  const handleSubmit = async (event) => {
-    event.preventDefault()
-    const data = new FormData(event.currentTarget)
-    dispatch(
-      updateUser({
-        firstName: data.get('firstName'),
-        lastName: data.get('lastName'),
-        phone: data.get('phone'),
-        studentId: data.get('studentId'),
-      })
-    )
-    setIsEdit(false)
-    setInputDisabled(true)
-  }
   const showButtonEdit = () => {
     return (
       <Button onClick={handleEdit} variant="contained">
@@ -85,6 +75,41 @@ export default function Profile() {
       </Button>
     )
   }
+
+  const ProfileSchema = Yup.object().shape({
+    firstName: Yup.string().min(3, 'Too Short!').max(50, 'Too Long!'),
+    lastName: Yup.string().min(3, 'Too Short!').max(50, 'Too Long!'),
+    phone: Yup.string().min(5, 'Too short').max(15, 'Too Long'),
+  })
+  const formik = useFormik({
+    initialValues: {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      phone: user.phone,
+      studentId: user.studentId,
+    },
+    validationSchema: ProfileSchema,
+    onSubmit: async (values, { resetForm }) => {
+      try {
+        dispatch(
+          updateUser({
+            ...values,
+          })
+        )
+        enqueueSnackbar('edit profile Success.', { variant: 'success' })
+        setIsEdit(false)
+        setInputDisabled(true)
+        resetForm()
+      } catch (error) {
+        enqueueSnackbar(
+          get(error, 'response.data.message', 'Error when create account'),
+          { variant: 'error' }
+        )
+      }
+    },
+  })
+
+  const { handleSubmit, getFieldProps, errors, touched, isSubmitting } = formik
   const showTextInput = (field, value) => {
     return (
       <TextField
@@ -92,140 +117,150 @@ export default function Profile() {
         name={field}
         fullWidth
         variant="standard"
-        defaultValue={value}
+        {...getFieldProps(field)}
+        error={Boolean(touched[field] && errors[field])}
+        helperText={touched[field] && errors[field]}
       ></TextField>
     )
   }
   return (
     <Layout>
-      <Container component="main" maxWidth="sm">
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Avatar
-            sx={{ width: 120, height: 120 }}
-            src={user.picture ? user.picture : accountDefault.photoURL}
-          ></Avatar>
-          <Typography component="h1" variant="h5" mt={2}>
-            Profile
-          </Typography>
-        </Box>
-        {auth.message && showErrMsg(auth.message)}
-        <Grid
-          container
-          justifyContent="space-between"
-          direction="row"
-          alignItems="center"
-        >
-          {/* Label Information */}
-          <Grid item>
-            <LabelBox component="h1" variant="h5" mt={2}>
-              Information
-            </LabelBox>
+      <FormikProvider value={formik}>
+        <Container component="main" maxWidth="sm">
+          <Box
+            sx={{
+              marginTop: 8,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <Avatar
+              sx={{ width: 120, height: 120 }}
+              src={user.picture ? user.picture : accountDefault.photoURL}
+            ></Avatar>
+            <Typography component="h1" variant="h5" mt={2}>
+              Profile
+            </Typography>
+          </Box>
+          {auth.message && showErrMsg(auth.message)}
+          <Grid
+            container
+            justifyContent="space-between"
+            direction="row"
+            alignItems="center"
+          >
+            {/* Label Information */}
+            <Grid item>
+              <LabelBox component="h1" variant="h5" mt={2}>
+                Information
+              </LabelBox>
+            </Grid>
+            <Grid item>{isEdit === false && showButtonEdit()}</Grid>
           </Grid>
-          <Grid item>{isEdit === false && showButtonEdit()}</Grid>
-        </Grid>
 
-        <MyBox
-          component="form"
-          onSubmit={handleSubmit}
-          noValidate
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          {/* Input first name */}
-          <InputBox>
-            <Grid container spacing={2}>
-              <Grid item xs={4}>
-                <LabelInput elevation={0}>First Name</LabelInput>
+          <MyBox
+            component="form"
+            onSubmit={handleSubmit}
+            noValidate
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            {/* Input first name */}
+            <InputBox>
+              <Grid container spacing={2}>
+                <Grid item xs={4}>
+                  <LabelInput elevation={0}>First Name</LabelInput>
+                </Grid>
+                <Grid item xs={8}>
+                  <WrapInforInput elevation={0}>
+                    {isEdit
+                      ? showTextInput('firstName', user.firstName)
+                      : user.firstName}
+                  </WrapInforInput>
+                </Grid>
               </Grid>
-              <Grid item xs={8}>
-                <WrapInforInput elevation={0}>
-                  {isEdit
-                    ? showTextInput('firstName', user.firstName)
-                    : user.firstName}
-                </WrapInforInput>
+            </InputBox>
+            {/* Input last name */}
+            <InputBox>
+              <Grid container spacing={2}>
+                <Grid item xs={4}>
+                  <LabelInput elevation={0}>Last Name</LabelInput>
+                </Grid>
+                <Grid item xs={8}>
+                  <WrapInforInput elevation={0}>
+                    {isEdit
+                      ? showTextInput('lastName', user.lastName)
+                      : user.lastName}
+                  </WrapInforInput>
+                </Grid>
               </Grid>
-            </Grid>
-          </InputBox>
-          {/* Input last name */}
-          <InputBox>
-            <Grid container spacing={2}>
-              <Grid item xs={4}>
-                <LabelInput elevation={0}>Last Name</LabelInput>
+            </InputBox>
+            {/* Input username */}
+            <InputBox>
+              <Grid container spacing={2}>
+                <Grid item xs={4}>
+                  <LabelInput elevation={0}>Username</LabelInput>
+                </Grid>
+                <Grid item xs={8}>
+                  <WrapInforInput elevation={0}>{user.username}</WrapInforInput>
+                </Grid>
               </Grid>
-              <Grid item xs={8}>
-                <WrapInforInput elevation={0}>
-                  {isEdit
-                    ? showTextInput('lastName', user.lastName)
-                    : user.lastName}
-                </WrapInforInput>
+            </InputBox>
+            {/* Input student ID */}
+            <InputBox>
+              <Grid container spacing={2}>
+                <Grid item xs={4}>
+                  <LabelInput elevation={0}>Student ID</LabelInput>
+                </Grid>
+                <Grid item xs={8}>
+                  <WrapInforInput elevation={0}>
+                    {isEdit
+                      ? showTextInput('studentId', user.studentId)
+                      : user.studentId}
+                  </WrapInforInput>
+                </Grid>
               </Grid>
-            </Grid>
-          </InputBox>
-          {/* Input username */}
-          <InputBox>
-            <Grid container spacing={2}>
-              <Grid item xs={4}>
-                <LabelInput elevation={0}>Username</LabelInput>
+            </InputBox>
+            {/* Input Phone number */}
+            <InputBox>
+              <Grid container spacing={2}>
+                <Grid item xs={4}>
+                  <LabelInput elevation={0}>Phone Number</LabelInput>
+                </Grid>
+                <Grid item xs={8}>
+                  <WrapInforInput elevation={0}>
+                    {isEdit ? showTextInput('phone', user.phone) : user.phone}
+                  </WrapInforInput>
+                </Grid>
               </Grid>
-              <Grid item xs={8}>
-                <WrapInforInput elevation={0}>{user.username}</WrapInforInput>
+            </InputBox>
+            {/* Input Email */}
+            <InputBox>
+              <Grid container spacing={2}>
+                <Grid item xs={4}>
+                  <LabelInput elevation={0}>Email</LabelInput>
+                </Grid>
+                <Grid item xs={8}>
+                  <WrapInforInput elevation={0}>{user.email}</WrapInforInput>
+                </Grid>
               </Grid>
-            </Grid>
-          </InputBox>
-          {/* Input student ID */}
-          <InputBox>
-            <Grid container spacing={2}>
-              <Grid item xs={4}>
-                <LabelInput elevation={0}>Student ID</LabelInput>
-              </Grid>
-              <Grid item xs={8}>
-                <WrapInforInput elevation={0}>
-                  {isEdit
-                    ? showTextInput('studentId', user.studentId)
-                    : user.studentId}
-                </WrapInforInput>
-              </Grid>
-            </Grid>
-          </InputBox>
-          {/* Input Phone number */}
-          <InputBox>
-            <Grid container spacing={2}>
-              <Grid item xs={4}>
-                <LabelInput elevation={0}>Phone Number</LabelInput>
-              </Grid>
-              <Grid item xs={8}>
-                <WrapInforInput elevation={0}>
-                  {isEdit ? showTextInput('phone', user.phone) : user.phone}
-                </WrapInforInput>
-              </Grid>
-            </Grid>
-          </InputBox>
-          {/* Input Email */}
-          <InputBox>
-            <Grid container spacing={2}>
-              <Grid item xs={4}>
-                <LabelInput elevation={0}>Email</LabelInput>
-              </Grid>
-              <Grid item xs={8}>
-                <WrapInforInput elevation={0}>{user.email}</WrapInforInput>
-              </Grid>
-            </Grid>
-          </InputBox>
-          <Button disabled={inputDisabled} type="submit" variant="contained">
-            Save changes
-          </Button>
-        </MyBox>
-      </Container>
+            </InputBox>
+            <LoadingButton
+              size="medium"
+              disabled={!formik.isValid || !formik.dirty}
+              loading={isSubmitting}
+              type="submit"
+              variant="contained"
+            >
+              Save Change
+            </LoadingButton>
+          </MyBox>
+        </Container>
+      </FormikProvider>
     </Layout>
   )
 }
