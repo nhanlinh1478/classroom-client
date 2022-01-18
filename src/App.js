@@ -12,7 +12,7 @@ function App() {
   const dispatch = useDispatch()
   const auth = useSelector((state) => state.user)
   const user = useSelector((state) => state.user.user)
-
+  //Test jenkins deploy
   useEffect(() => {
     async function fetchAPI() {
       dispatch(fetchUser())
