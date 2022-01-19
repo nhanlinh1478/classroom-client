@@ -192,7 +192,7 @@ export default function SignIn() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              disabled={!formik.isValid || !formik.dirty}
+              disabled={!formik.isValid || !formik.dirty || formik.isSubmitting}
             >
               Sign In
             </SubmitButton>
