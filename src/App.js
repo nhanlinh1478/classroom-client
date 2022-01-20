@@ -14,7 +14,7 @@ function App() {
   const auth = useSelector((state) => state.user)
   const user = useSelector((state) => state.user.user)
   const notistackRef = useRef(null)
-
+  // Test jenkins
   useEffect(() => {
     async function fetchAPI() {
       dispatch(fetchUser())
