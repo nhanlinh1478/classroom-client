@@ -70,10 +70,6 @@ export default function Profile() {
     setIsEdit(true)
     setInputDisabled(false)
   }
-<<<<<<< HEAD
-=======
-
->>>>>>> c6c424ec559a689d368dbd9133f94bf7672846ec
   const showButtonEdit = () => {
     return (
       <Button onClick={handleEdit} variant="contained">
@@ -83,27 +79,6 @@ export default function Profile() {
   }
 
   const ProfileSchema = Yup.object().shape({
-<<<<<<< HEAD
-    firstName: Yup.string().min(3, 'Too Short!').max(50, 'Too Long!'),
-    lastName: Yup.string().min(3, 'Too Short!').max(50, 'Too Long!'),
-    phone: Yup.string().min(5, 'Too short').max(15, 'Too Long'),
-  })
-  const formik = useFormik({
-    initialValues: {
-      firstName: user.firstName,
-      lastName: user.lastName,
-      phone: user.phone,
-      studentId: user.studentId,
-    },
-    validationSchema: ProfileSchema,
-    onSubmit: async (values, { resetForm }) => {
-      try {
-        dispatch(
-          updateUser({
-            ...values,
-          })
-        )
-=======
     firstName: Yup.string().max(50, 'Too Long!'),
     lastName: Yup.string().max(50, 'Too Long!'),
     phone: Yup.string().max(15, 'Too Long'),
@@ -120,20 +95,12 @@ export default function Profile() {
     onSubmit: async (values, { resetForm }) => {
       try {
         await dispatch(updateUser({ ...values })).unwrap()
->>>>>>> c6c424ec559a689d368dbd9133f94bf7672846ec
         enqueueSnackbar('edit profile Success.', { variant: 'success' })
         setIsEdit(false)
         setInputDisabled(true)
         resetForm()
       } catch (error) {
-<<<<<<< HEAD
-        enqueueSnackbar(
-          get(error, 'response.data.message', 'Error when create account'),
-          { variant: 'error' }
-        )
-=======
         enqueueSnackbar(error, { variant: 'error' })
->>>>>>> c6c424ec559a689d368dbd9133f94bf7672846ec
       }
     },
   })
@@ -211,15 +178,6 @@ export default function Profile() {
                       : user.firstName}
                   </WrapInforInput>
                 </Grid>
-<<<<<<< HEAD
-              </Grid>
-            </InputBox>
-            {/* Input last name */}
-            <InputBox>
-              <Grid container spacing={2}>
-                <Grid item xs={4}>
-                  <LabelInput elevation={0}>Last Name</LabelInput>
-=======
               </Grid>
             </InputBox>
             {/* Input last name */}
@@ -237,39 +195,6 @@ export default function Profile() {
                 </Grid>
               </Grid>
             </InputBox>
-            {/* Input username */}
-            <InputBox>
-              <Grid container spacing={2}>
-                <Grid item xs={4}>
-                  <LabelInput elevation={0}>Username</LabelInput>
-                </Grid>
-                <Grid item xs={8}>
-                  <WrapInforInput elevation={0}>{user.username}</WrapInforInput>
-                </Grid>
-              </Grid>
-            </InputBox>
-            {/* Input student ID */}
-            <InputBox>
-              <Grid container spacing={2}>
-                <Grid item xs={4}>
-                  <LabelInput elevation={0}>Student ID</LabelInput>
->>>>>>> c6c424ec559a689d368dbd9133f94bf7672846ec
-                </Grid>
-                <Grid item xs={8}>
-                  <WrapInforInput elevation={0}>
-                    {isEdit
-<<<<<<< HEAD
-                      ? showTextInput('lastName', user.lastName)
-                      : user.lastName}
-=======
-                      ? showTextInput('studentId', user.studentId)
-                      : user.studentId}
->>>>>>> c6c424ec559a689d368dbd9133f94bf7672846ec
-                  </WrapInforInput>
-                </Grid>
-              </Grid>
-            </InputBox>
-<<<<<<< HEAD
             {/* Input username */}
             <InputBox>
               <Grid container spacing={2}>
@@ -320,32 +245,6 @@ export default function Profile() {
                 </Grid>
               </Grid>
             </InputBox>
-=======
-            {/* Input Phone number */}
-            <InputBox>
-              <Grid container spacing={2}>
-                <Grid item xs={4}>
-                  <LabelInput elevation={0}>Phone Number</LabelInput>
-                </Grid>
-                <Grid item xs={8}>
-                  <WrapInforInput elevation={0}>
-                    {isEdit ? showTextInput('phone', user.phone) : user.phone}
-                  </WrapInforInput>
-                </Grid>
-              </Grid>
-            </InputBox>
-            {/* Input Email */}
-            <InputBox>
-              <Grid container spacing={2}>
-                <Grid item xs={4}>
-                  <LabelInput elevation={0}>Email</LabelInput>
-                </Grid>
-                <Grid item xs={8}>
-                  <WrapInforInput elevation={0}>{user.email}</WrapInforInput>
-                </Grid>
-              </Grid>
-            </InputBox>
->>>>>>> c6c424ec559a689d368dbd9133f94bf7672846ec
             <LoadingButton
               size="medium"
               disabled={!formik.isValid || !formik.dirty}
