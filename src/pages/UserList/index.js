@@ -208,8 +208,7 @@ const UserList = () => {
             Teacher
           </Typography>
 
-          {userRole === 'TEACHER' &&
-            showButtonInvite('Invite TEACHER ', 'TEACHER')}
+          {userRole === 'ADMIN' && showButtonInvite('Invite ADMIN ', 'ADMIN')}
         </Box>
         <Divider />
 
@@ -232,7 +231,7 @@ const UserList = () => {
           <Typography sx={{ mt: 2, mb: 2 }} variant="h6" component="div">
             Student
           </Typography>
-          {userRole === 'TEACHER' &&
+          {userRole === 'ADMIN' &&
             showButtonInvite('Invite STUDENT ', 'STUDENT')}
         </Box>
         <Divider />
@@ -281,7 +280,7 @@ const UserList = () => {
             <Typography sx={{ mt: 2, mb: 2 }} variant="h6" component="div">
               List Users
             </Typography>
-            {userRole === 'TEACHER' && renderImportExport()}
+            {userRole === 'ADMIN' && renderImportExport()}
           </Header>
           {renderTeachersList()}
           <Divider sx={{ mb: 5 }} />

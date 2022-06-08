@@ -70,7 +70,6 @@ export default function Profile() {
     setIsEdit(true)
     setInputDisabled(false)
   }
-
   const showButtonEdit = () => {
     return (
       <Button onClick={handleEdit} variant="contained">
