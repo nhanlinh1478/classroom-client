@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import isEmpty from 'lodash/isEmpty'
 import socket, { establishNewConnection } from 'src/socket'
 import { SnackbarProvider } from 'notistack'
-
+//test cicd
 function App() {
   const dispatch = useDispatch()
   const auth = useSelector((state) => state.user)
