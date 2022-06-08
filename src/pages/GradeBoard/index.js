@@ -82,13 +82,24 @@ const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
         ? 'rgba(0,0,0,.85)'
         : 'rgba(255,255,255,0.65)',
   },
+  '& .finalize--header': {
+    backgroundColor: '#c2c8d1',
+  },
 }))
 
 const ButtonMenuTable = styled(Button)({
   justifyContent: 'flex-start',
   color: '#000000',
 })
-
+const CellTypography = styled(Typography)({
+  fontWeight: 'bold',
+  '& .point': {
+    display: 'none',
+  },
+  '&:hover .point': {
+    display: 'inline',
+  },
+})
 const readExcel = (file) => {
   const promise = new Promise((resolve, reject) => {
     const fileReader = new FileReader()
@@ -283,7 +294,6 @@ const GradesBoard = () => {
   const handleSaveGrades = async (event) => {
     event.preventDefault()
     const field = event.target.id
-
     const colGrades = rows.map((row) => {
       const { id } = row
       const point = row[field]
@@ -305,6 +315,11 @@ const GradesBoard = () => {
           )
         )
       })
+      const res = await axiosClient.get(`/api/classrooms/${id}/grades`)
+      res.data.forEach((grade, index) => {
+        res.data[index].users = grade.users.map((user) => _.pick(user, mapUser))
+      })
+      setListGradeStudent(res.data)
       enqueueSnackbar(response.data.message, { variant: 'success' })
     } catch (error) {
       enqueueSnackbar(error.message, { variant: 'error' })
@@ -392,9 +407,14 @@ const GradesBoard = () => {
   )
 
   const createColTable = (g, editable) => {
+    let headerClass = 'normal--header'
+    if (g.finalized == true) {
+      headerClass = 'finalize--header'
+    }
     const col = {
       field: g.id,
       headerName: g.name,
+      headerClassName: headerClass,
       type: 'number',
       minWidth: 150,
       editable: editable,
@@ -423,25 +443,23 @@ const GradesBoard = () => {
                 Total grade: {g.point}
               </Typography>
             </Grid>
+            {g.finalized == true && (
+              <Grid item>
+                <Typography noWrap variant="subtitle2">
+                  Marked Finalize
+                </Typography>
+              </Grid>
+            )}
           </Grid>
         </>
       ),
       renderCell: (params) => (
-        <Typography
-          variant="h5"
-          sx={{
-            fontWeight: 'bold',
-            '& .point': {
-              display: 'none',
-            },
-            '&:hover .point': {
-              display: 'inline',
-            },
-          }}
-        >
-          {params.value}
-          <span className="point">__/{g.point}</span>
-        </Typography>
+        <>
+          <CellTypography variant="h5">
+            {params.value}
+            <span className="point">__/{g.point}</span>
+          </CellTypography>
+        </>
       ),
     }
     return col
@@ -473,6 +491,8 @@ const GradesBoard = () => {
             lodashGet(user, 'User.studentId') !== null
         )
         const listGradeStudent = res.data
+        setListGradeStudent(listGradeStudent)
+        setUsers(users)
         if (users && listGradeStudent) {
           let arrData = []
           let tempCol = []
@@ -497,7 +517,14 @@ const GradesBoard = () => {
                 return keymapUser[k]
               }),
             ]
-            row[0]['fullName'] = user.fullName
+            if (user.fullName == null) {
+              row[0]['fullName'] =
+                _.get(user, 'User.lastName') +
+                ' ' +
+                _.get(user, 'User.firstName')
+            } else {
+              row[0]['fullName'] = user.fullName
+            }
             //Total grade of student
             let totalGradeRow = 0
             listGradeStudent.forEach((g) => {
@@ -523,8 +550,6 @@ const GradesBoard = () => {
           const col = columns.concat(tempCol)
           setColumns(col)
         }
-        setListGradeStudent(listGradeStudent)
-        setUsers(response.data.filter((user) => user.role === 'STUDENT'))
         setIsLoading(false)
       } catch (error) {
         enqueueSnackbar(error.message)
@@ -536,6 +561,64 @@ const GradesBoard = () => {
     // Call while grades update
     updateTotalGrades(realRows)
   }, [realRows])
+  useEffect(() => {
+    // Call while grades update
+    if (users && listGradeStudent) {
+      let arrData = []
+      let tempCol = []
+      let totalGrade = {
+        id: 'TotalGrade', //Field col
+        name: 'Total Grade', // Header Name
+        point: 0,
+      }
+      //Add grades field to column
+      listGradeStudent.forEach((g) => {
+        const temp = createColTable(g, true)
+        tempCol.push(temp)
+        totalGrade.point += g.point
+      })
+      //Add total grade column
+      const temp = createColTable(totalGrade, false)
+      tempCol.push(temp)
+      //--------------
+      users.forEach((user) => {
+        let row = [
+          _.mapKeys(_.pick(user, mapUser), function (v, k) {
+            return keymapUser[k]
+          }),
+        ]
+        if (user.fullName == null) {
+          row[0]['fullName'] =
+            _.get(user, 'User.lastName') + ' ' + _.get(user, 'User.firstName')
+        } else {
+          row[0]['fullName'] = user.fullName
+        }
+        //Total grade of student
+        let totalGradeRow = 0
+        listGradeStudent.forEach((g) => {
+          const userFilter = g.users.filter(
+            (u) => lodashGet(u, 'User.id') === user.userId
+          )
+          //Check student exist in array user
+          if (userFilter.length > 0) {
+            if (userFilter[0].point || userFilter[0].point === 0) {
+              row[0][g.id] = userFilter[0].point
+              totalGradeRow += userFilter[0].point
+            } else {
+              row[0][g.id] = null
+              totalGradeRow += 0
+            }
+          }
+        })
+        row[0][totalGrade.id] = totalGradeRow
+        arrData.push(row[0])
+      })
+      setRows(arrData)
+      setRealRows(arrData)
+      const col = columns.concat(tempCol)
+      setColumns(col)
+    }
+  }, [listGradeStudent])
   return (
     <Layout>
       <Box
@@ -568,7 +651,7 @@ const GradesBoard = () => {
               msg: dialogMsg,
               handleClose: handleCloseDialog,
             })}
-          {!rows.length
+          {!rows.length || rows[0].studentId == null
             ? NoDataDisplay({
                 msgSuggest: 'Please check user list or grade structuce',
                 photoURL: NoDataIll.photoURL,

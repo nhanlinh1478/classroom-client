@@ -1,22 +1,11 @@
-import { MoreVert } from '@mui/icons-material'
-import MenuBookIcon from '@mui/icons-material/MenuBook'
-import {
-  Avatar,
-  Button,
-  Card,
-  CardHeader,
-  Container,
-  IconButton,
-  Popover,
-  Typography,
-} from '@mui/material'
+import { Avatar, Card, CardHeader, IconButton, Typography } from '@mui/material'
 import { grey } from '@mui/material/colors'
 import { styled } from '@mui/styles'
-import { useState } from 'react'
 import PreviewIcon from '@mui/icons-material/Preview'
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import get from 'lodash/get'
 import { Link } from 'react-router-dom'
+
 const MyCardHeader = styled(CardHeader)({
   '& .MuiCardHeader-title': {
     fontSize: '20px',
@@ -24,6 +13,7 @@ const MyCardHeader = styled(CardHeader)({
     fontWeight: 'bold',
   },
 })
+
 export default function RequestReviewCard({ props }) {
   const reviewGradeId = props.id
   const gradeName = get(props, 'Grade.name')
@@ -40,7 +30,10 @@ export default function RequestReviewCard({ props }) {
           action={
             <IconButton
               component={Link}
-              to={`/classrooms/${props.classroomId}/grades-review/${reviewGradeId}`}
+              to={`/classrooms/${get(
+                props,
+                'Grade.classroomId'
+              )}/grades-review/${reviewGradeId}`}
               aria-label="settings"
             >
               <ArrowForwardIosIcon />

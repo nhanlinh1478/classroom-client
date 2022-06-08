@@ -10,12 +10,14 @@ import {
   DialogTitle,
   DialogActions,
   Button,
+  Typography,
 } from '@mui/material'
 import { Delete as DeleteIcon } from '@mui/icons-material'
 import styled from '@emotion/styled'
 import get from 'lodash/get'
 import { showErrMsg } from 'src/utils/Notifications'
 import axiosClient from 'src/axiosClient'
+import accountDefault from 'src/_mocks_/account'
 
 const StatusText = styled('p')`
   text-transform: lowercase;
@@ -72,9 +74,29 @@ const UserItem = ({ user, removeUser }) => {
       >
         <Box sx={{ display: 'flex' }}>
           <ListItemAvatar>
-            <Avatar />
+            <Avatar
+              src={
+                get(user, 'User.picture')
+                  ? get(user, 'User.picture')
+                  : accountDefault.photoURL
+              }
+            />
           </ListItemAvatar>
-          <p>{get(user, 'User.username')}</p>
+          <Box>
+            <Typography
+              variant="body1"
+              sx={{ display: 'flex', alignItems: 'center', mr: 2 }}
+            >
+              Username: {get(user, 'User.username')}
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{ display: 'flex', alignItems: 'center' }}
+            >
+              Full Name: {get(user, 'fullName')}
+            </Typography>
+          </Box>
+
           {user.status === 'PENDING' && (
             <StatusText>({user.status})</StatusText>
           )}

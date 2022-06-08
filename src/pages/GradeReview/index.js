@@ -11,12 +11,7 @@ import {
   LinearProgress,
   Divider,
 } from '@mui/material'
-import {
-  AddSharp,
-  ArrowBackIosNew,
-  FileDownload,
-  FileUpload,
-} from '@mui/icons-material'
+import { ArrowBackIosNew } from '@mui/icons-material'
 import Layout from '../../Layout/Layout'
 import styled from '@emotion/styled'
 import { useDispatch, useSelector } from 'react-redux'
@@ -44,8 +39,8 @@ const GradesReview = () => {
   const [gradesReview, setGradesReview] = useState([])
   const [requestReviews, setRequestReviews] = useState([])
   const history = useHistory()
-  const { enqueueSnackbar } = useSnackbar()
   const dispatch = useDispatch()
+
   useEffect(() => {
     if (!_.isEmpty(user)) {
       if (userRole == '') {

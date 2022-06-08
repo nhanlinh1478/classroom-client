@@ -6,21 +6,13 @@ import {
   Typography,
   Container,
   Button,
-  Box,
   IconButton,
   LinearProgress,
-  Paper,
   Divider,
   Skeleton,
   TextField,
 } from '@mui/material'
-import {
-  AddSharp,
-  ArrowBackIosNew,
-  FileDownload,
-  FileUpload,
-  MoreVert,
-} from '@mui/icons-material'
+import { ArrowBackIosNew } from '@mui/icons-material'
 import Layout from '../../Layout/Layout'
 import styled from '@emotion/styled'
 import { useDispatch, useSelector } from 'react-redux'
@@ -317,7 +309,7 @@ const DetailReviewGrade = () => {
                   component={'form'}
                   onSubmit={handleSubmitComment}
                 >
-                  <Grid item lg={12}>
+                  <Grid item xs={6} sm={8} md={10} lg={12}>
                     <TextField
                       placeholder="Enter new comment"
                       multiline
